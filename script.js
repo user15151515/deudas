@@ -37,47 +37,68 @@ const firebaseConfig = {
     const eliaTotal = totalsByPerson.elia.toFixed(2);
     const janaTotal = totalsByPerson.jana.toFixed(2);
     totalAmount.textContent = `Elia: ${eliaTotal} € | Jana: ${janaTotal} €`;
-  }
+    updatePaymentSummary();
+}
+
   
-  // Escuchar cambios en Firestore para actualizar la tabla automáticamente
-  const debtsCollection = db.collection("debts");
-  debtsCollection.onSnapshot((snapshot) => {
+// Escuchar cambios en Firestore para actualizar la tabla automáticamente
+const debtsCollection = db.collection("debts");
+
+
+debtsCollection.onSnapshot((snapshot) => {
     debtTable.innerHTML = ""; // Limpiar tabla
     totalsByPerson = { elia: 0, jana: 0 }; // Reiniciar totales
-  
+
     snapshot.forEach((doc) => {
-      const debt = doc.data();
-      const row = document.createElement("tr");
-      row.classList.add(debt.status);
-      row.innerHTML = `
-        <td>${debt.date}</td>
-        <td>${debt.person}</td>
-        <td>${debt.amount.toFixed(2)} €</td>
-        <td>${debt.description}</td>
-        <td><button class="completed-button ${debt.status}">Marcar com a pagada</button></td>
-      `;
-  
-      // Actualizar totales
-      const person = normalizeName(debt.person);
-      if (totalsByPerson[person] !== undefined) {
-        if (debt.status === "not-paid") {
-          totalsByPerson[person] += debt.amount;
+        const debt = doc.data();
+
+        // Mostrar solo deudas no archivadas
+        if (debt.archived) return;
+
+        // Actualizar los totales por persona solo si la deuda no está pagada
+        if (debt.status !== "completed") {
+            const person = normalizeName(debt.person);
+            if (totalsByPerson[person] !== undefined) {
+                totalsByPerson[person] += debt.amount;
+            }
         }
-      }
-  
-      // Añadir evento al botón para alternar el estado de pago
-      const completeButton = row.querySelector(".completed-button");
-      completeButton.addEventListener("click", async () => {
-        const newStatus = debt.status === "not-paid" ? "completed" : "not-paid";
-        await db.collection("debts").doc(doc.id).update({ status: newStatus });
-      });
-  
-      debtTable.appendChild(row);
+
+        const row = document.createElement("tr");
+        row.classList.add(debt.status);
+        row.innerHTML = `
+            <td>${debt.date}</td>
+            <td>${debt.person}</td>
+            <td>${debt.amount.toFixed(2)} €</td>
+            <td>${debt.description}</td>
+            <td>
+                <button class="completed-button ${debt.status}">
+                    ${debt.status === "not-paid" ? "Marcar como pagada" : "Marcar como no pagada"}
+                </button>
+            </td>
+        `;
+
+        // Añadir botón de archivar si está pagada
+        if (debt.status === "completed") {
+            addArchiveButton(row, doc.id);
+        }
+
+        const completeButton = row.querySelector(".completed-button");
+        completeButton.addEventListener("click", async () => {
+            const newStatus = debt.status === "not-paid" ? "completed" : "not-paid";
+            await db.collection("debts").doc(doc.id).update({ status: newStatus });
+        });
+
+        debtTable.appendChild(row);
     });
-  
+
+    // Actualizar los totales y el resumen
     updateTotals();
-  });
-  
+});
+
+
+
+
+
   // Añadir una nueva deuda a Firestore
   addButton.addEventListener("click", async () => {
     const person = normalizeName(personInput.value.trim());
@@ -103,3 +124,81 @@ const firebaseConfig = {
     descriptionInput.value = "";
   });
   
+
+
+
+// Llama a updatePaymentSummary cada vez que se actualicen los totales
+function updateTotals() {
+    const eliaTotal = totalsByPerson.elia.toFixed(2);
+    const janaTotal = totalsByPerson.jana.toFixed(2);
+    totalAmount.textContent = `Elia: ${eliaTotal} € | Jana: ${janaTotal} €`;
+    updatePaymentSummary();
+}
+
+  // Actualiza el mensaje de quién debe pagar a quién
+  function updatePaymentSummary() {
+    const eliaTotal = parseFloat(totalsByPerson.elia) || 0;
+    const janaTotal = parseFloat(totalsByPerson.jana) || 0;
+    const paymentSummary = document.getElementById("payment-summary");
+
+    if (eliaTotal > janaTotal) {
+        const amount = (eliaTotal - janaTotal).toFixed(2);
+        paymentSummary.textContent = `L'Èlia ha de pagar ${amount} € a la Jana`;
+    } else if (janaTotal > eliaTotal) {
+        const amount = (janaTotal - eliaTotal).toFixed(2);
+        paymentSummary.textContent = `La Jana ha de pagar ${amount} € a l'Èlia`;
+    } else {
+        paymentSummary.textContent = `Ningú no deu res a ningú 🥳`;
+    }
+}
+
+function addArchiveButton(row, docId) {
+    const archiveButton = document.createElement("button");
+    archiveButton.classList.add("archive-button");
+
+    // Añadir el ícono de papelera al botón
+    archiveButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
+        </svg>
+    `;
+
+    archiveButton.addEventListener("click", async () => {
+        const debtRef = db.collection("debts").doc(docId);
+        await debtRef.update({ archived: true });
+        row.remove(); // Elimina la deuda de la tabla principal
+    });
+
+    const lastCell = row.lastElementChild;
+    lastCell.style.display = "flex"; // Asegura que los botones estén en línea
+    lastCell.style.alignItems = "center"; // Alinea verticalmente los botones
+    lastCell.style.gap = "10px"; // Espacio entre botones
+    lastCell.appendChild(archiveButton);
+}
+
+
+
+document.getElementById("show-archived").addEventListener("click", async () => {
+    const archivedDebtsContainer = document.getElementById("archived-debts");
+    if (archivedDebtsContainer.style.display === "none") {
+        archivedDebtsContainer.style.display = "block";
+        archivedDebtsContainer.innerHTML = ""; // Limpiar contenido previo
+
+        const archivedSnapshot = await db.collection("debts").where("archived", "==", true).get();
+        if (!archivedSnapshot.empty) {
+            archivedSnapshot.forEach((doc) => {
+                const debt = doc.data();
+                const row = document.createElement("div");
+                row.classList.add("archived-row");
+                row.innerHTML = `
+                    <p>${debt.date} - ${debt.person} - ${debt.amount.toFixed(2)} € - ${debt.description}</p>
+                `;
+                archivedDebtsContainer.appendChild(row);
+            });
+        } else {
+            archivedDebtsContainer.innerHTML = "<p>No hay deudas archivadas.</p>";
+        }
+    } else {
+        archivedDebtsContainer.style.display = "none";
+    }
+});

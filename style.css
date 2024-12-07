@@ -58,6 +58,8 @@ th, td {
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    white-space: nowrap; /* Evita que el contenido se divida en varias líneas */
+
 }
 
 /* Resumen */
@@ -66,6 +68,45 @@ th, td {
     font-size: 1.2em;
     text-align: right;
 }
+
+.payment-summary {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    background-color: #f4f4f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón para mostrar deudas archivadas */
+.show-archived {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.show-archived:hover {
+    background-color: #5a6268;
+}
+
+/* Contenedor para deudas archivadas */
+.archived-debts {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 
 /* Filas de la tabla */
 tr.not-paid td {
@@ -77,19 +118,22 @@ tr.completed td {
     background-color: #d4edda; /* Fondo verde claro */
     color: #155724; /* Texto verde oscuro */
     text-decoration: line-through; /* Tacha el texto */
-
-    
 }
 
 /* Botones */
+/* Botones generales */
 button.completed-button {
+    display: inline-flex; /* Asegura que esté en la misma línea que la papelera */
     padding: 5px 10px;
+    margin: 0; /* Elimina márgenes innecesarios */
     font-size: 14px;
-    border-radius: 4px;
+    border-radius: 5px;
     transition: all 0.2s ease-in-out; /* Animación suave para cambios */
     border: 1px solid transparent; /* Para evitar cambios bruscos en hover */
+    background: #007bff; /* Color base por defecto */
+    color: white; /* Texto blanco por defecto */
+   cursor: pointer;
 }
-
 /* Botón para deudas no pagadas */
 button.completed-button.not-paid {
     background-color: #ffbdc2; /* Fondo rojo claro */
@@ -98,15 +142,50 @@ button.completed-button.not-paid {
 }
 
 /* Botón para deudas pagadas */
-button.completed-button.paid {
+button.completed-button.completed {
     background-color: #b3e6c1; /* Fondo verde pastel */
     color: #155724; /* Texto verde oscuro */
     border-color: #155724; /* Borde verde suave */
 }
-
 
 /* Hover para botones */
 button.completed-button:not(:disabled):hover {
     opacity: 0.9;
     cursor: pointer;
 }
+
+/* Botón para archivar deudas (icono de papelera) */
+button.archive-button {
+    margin-left: 10px; /* Espaciado entre los botones */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Elimina el padding interno del botón */
+    display: inline-flex;
+    align-items: center; /* Alinea verticalmente el icono */
+    justify-content: center;
+}
+
+button.archive-button:hover svg {
+    fill: #c9302c; /* Rojo más oscuro al hacer hover */
+    transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+}
+
+/* Icono de papelera */
+button.archive-button svg {
+    width: 16px; /* Tamaño del icono */
+    height: 16px;
+    fill: #d9534f; /* Color rojo */
+    transition: fill 0.3s ease, transform 0.2s ease;
+}
+
+button.archive-button:hover svg {
+    fill: #c9302c; /* Rojo más oscuro al hacer hover */
+}
+
+/* Contenedor para botones dentro de la celda */
+button.completed-button + button.archive-button {
+    margin-left: 8px; /* Espaciado entre los botones */
+    display: inline-flex; /* Asegura que estén en la misma línea */
+}
+
