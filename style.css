@@ -1,0 +1,112 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f9;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Resumen */
+#summary {
+    margin-top: 20px;
+    font-size: 1.2em;
+    text-align: right;
+}
+
+/* Filas de la tabla */
+tr.not-paid td {
+    background-color: #f8d7da; /* Fondo rojo claro */
+    color: #721c24; /* Texto rojo oscuro */
+}
+
+tr.completed td {
+    background-color: #d4edda; /* Fondo verde claro */
+    color: #155724; /* Texto verde oscuro */
+    text-decoration: line-through; /* Tacha el texto */
+
+    
+}
+
+/* Botones */
+button.completed-button {
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out; /* Animación suave para cambios */
+    border: 1px solid transparent; /* Para evitar cambios bruscos en hover */
+}
+
+/* Botón para deudas no pagadas */
+button.completed-button.not-paid {
+    background-color: #ffbdc2; /* Fondo rojo claro */
+    color: #4e1016; /* Texto rojo oscuro */
+    border-color: #4c1111; /* Borde rojo */
+}
+
+/* Botón para deudas pagadas */
+button.completed-button.paid {
+    background-color: #b3e6c1; /* Fondo verde pastel */
+    color: #155724; /* Texto verde oscuro */
+    border-color: #155724; /* Borde verde suave */
+}
+
+
+/* Hover para botones */
+button.completed-button:not(:disabled):hover {
+    opacity: 0.9;
+    cursor: pointer;
+}

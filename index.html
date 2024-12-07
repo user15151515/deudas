@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pagame</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>deudas🥰🥰🤞🤞</h1>
+
+    <!-- Formulario para añadir deudas -->
+    <div class="form-container">
+      <input type="text" id="person" placeholder="qui" />
+      <input type="number" id="amount" placeholder="quant" />
+      <input type="text" id="description" placeholder="per què" />
+      <button id="add-button">Afegir Deuda</button>
+    </div>
+
+    <!-- Tabla de deudas -->
+    <table id="debt-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Qui</th>
+          <th>Quantitat</th>
+          <th>Descripció</th>
+          <th>Estat</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Las filas se generan dinámicamente -->
+      </tbody>
+    </table>
+
+    <!-- Resumen total -->
+    <div id="summary">
+      Total: <span id="total-amount">0</span> 
+    </div>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  
+
+  <!-- Archivo de configuración y lógica -->
+  <script src="script.js"></script>
+</body>
+</html>
