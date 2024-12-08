@@ -1,3 +1,117 @@
+@media (max-width: 768px) {
+    /* Contenedor principal */
+    .container {
+        padding: 10px;
+    }
+
+    /* Encabezado */
+    h1 {
+        font-size: 1.4em;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    /* Formulario */
+    .form-container {
+        flex-direction: column; /* Apila verticalmente */
+        gap: 10px;
+        width: 100%; /* Ocupa todo el ancho */
+        box-sizing: border-box; /* Incluye padding en el ancho */
+        padding: 0 10px; /* Espacio interno a los lados */
+    }
+
+    input {
+        width: 100%; /* Ocupa todo el ancho */
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box; /* Ajusta el modelo de caja */
+    }
+
+    button#add-button {
+        width: 100%; /* Botón ocupa todo el ancho */
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    /* Tabla */
+    table {
+        width: 100%;
+        font-size: 0.9em;
+    }
+
+    th, td {
+        word-wrap: break-word;
+        padding: 8px;
+        text-align: left;
+    }
+
+    /* Tabla en modo scroll horizontal */
+    #debt-table {
+        overflow-x: auto;
+        display: block;
+    }
+
+    #summary {
+        display: flex; /* Para alinear elementos en fila */
+        justify-content: space-between; /* Espacio entre texto y botón */
+        align-items: center; /* Centrado vertical */
+        font-size: 1.2em;
+        margin-top: 20px;
+    }
+    
+    #show-archived {
+        font-size: 0.9em;
+        padding: 8px 12px;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    #show-archived:hover {
+        background-color: #5a6268;
+    }
+    
+
+    /* Deudas archivadas */
+    .archived-debts {
+        margin-top: 20px;
+        padding: 10px;
+    }
+
+    .delete-all-button {
+        width: 100%;
+        font-size: 1em;
+    }
+
+    .bicing-button {
+        font-size: 0.2em; /* Más pequeño en pantallas móviles */
+        margin: 10px auto; /* Centramos el botón */
+        padding: 4px 7px; /* Tamaño compacto */
+        width: auto; /* No ocupa todo el ancho */
+    }
+
+    /* Ajuste de filas archivadas */
+    .archived-row {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 0;
+    }
+
+    .archived-item span {
+        margin-bottom: 10px;
+        word-break: break-word;
+    }
+}
+
+
+
+
+
+
+
 /* Estilos generales */
 body {
     font-family: Arial, sans-serif;
@@ -70,7 +184,6 @@ th, td {
 }
 
 .payment-summary {
-    margin-top: 30px;
     text-align: center;
     font-size: 1.5em;
     font-weight: bold;
@@ -78,24 +191,27 @@ th, td {
     background-color: #f4f4f9;
     padding: 15px;
     border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Botón para mostrar deudas archivadas */
-.show-archived {
-    margin-top: 20px;
-    padding: 10px 20px;
+#show-archived {
+    display: block; /* Ocupa su propia línea */
+    margin: 10px auto; /* Centra horizontalmente y agrega espaciado superior/inferior */
+    padding: 10px 20px; /* Tamaño del botón */
+    width: 50%; /* Ocupa la mitad del ancho del contenedor */
+    max-width: 400px; /* Limita el tamaño máximo */
     background-color: #6c757d;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
+    text-align: center; /* Centra el texto dentro del botón */
 }
 
-.show-archived:hover {
+#show-archived:hover {
     background-color: #5a6268;
 }
+
 
 /* Contenedor para deudas archivadas */
 .archived-debts {
@@ -105,6 +221,72 @@ th, td {
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón para borrar deudas archivadas (igual que el normal) */
+button.archive-button {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.archive-button:hover svg {
+    fill: #c9302c;
+    transform: scale(1.1);
+}
+
+button.archive-button svg {
+    width: 16px;
+    height: 16px;
+    fill: #d9534f;
+    transition: fill 0.3s ease, transform 0.2s ease;
+}
+
+.archived-row {
+    display: flex;
+    justify-content: space-between;
+
+
+
+
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+}
+
+.archived-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.archived-item span {
+    flex-grow: 1;
+    padding-right: 10px;
+}
+
+.delete-all-button {
+    padding: 10px 20px;
+    background-color: #d9534f; /* Rojo */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.delete-all-button:hover {
+    background-color: #c9302c; /* Rojo oscuro */
 }
 
 
@@ -187,5 +369,23 @@ button.archive-button:hover svg {
 button.completed-button + button.archive-button {
     margin-left: 8px; /* Espaciado entre los botones */
     display: inline-flex; /* Asegura que estén en la misma línea */
+}
+
+/* Botón de Bicing más pequeño */
+.bicing-button {
+    padding: 8px 15px; /* Reducimos el tamaño del botón */
+    font-size: 0.9em; /* Texto más pequeño */
+    width: auto; /* Deja de ocupar todo el ancho */
+    display: inline-block; /* Se ajusta al contenido */
+    margin: 10px 0; /* Separación superior e inferior */
+    background-color: #d90401; /* Mantiene el color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bicing-button:hover {
+    background-color: rgb(206, 20, 13); /* Rojo oscuro al pasar el ratón */
 }
 

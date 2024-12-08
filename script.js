@@ -143,12 +143,12 @@ function updateTotals() {
 
     if (eliaTotal > janaTotal) {
         const amount = (eliaTotal - janaTotal).toFixed(2);
-        paymentSummary.textContent = `L'Èlia ha de pagar ${amount} € a la Jana`;
+        paymentSummary.textContent = `L'Èlia ha de pagar ${amount}€ a la Jana`;
     } else if (janaTotal > eliaTotal) {
         const amount = (janaTotal - eliaTotal).toFixed(2);
-        paymentSummary.textContent = `La Jana ha de pagar ${amount} € a l'Èlia`;
+        paymentSummary.textContent = `La Jana ha de pagar ${amount}€ a l'Èlia`;
     } else {
-        paymentSummary.textContent = `Ningú no deu res a ningú 🥳`;
+        paymentSummary.textContent = `Ningú deu res 🥳`;
     }
 }
 
@@ -177,7 +177,6 @@ function addArchiveButton(row, docId) {
 }
 
 
-
 document.getElementById("show-archived").addEventListener("click", async () => {
     const archivedDebtsContainer = document.getElementById("archived-debts");
     if (archivedDebtsContainer.style.display === "none") {
@@ -186,14 +185,55 @@ document.getElementById("show-archived").addEventListener("click", async () => {
 
         const archivedSnapshot = await db.collection("debts").where("archived", "==", true).get();
         if (!archivedSnapshot.empty) {
+            // Botón para borrar todo
+            archivedDebtsContainer.innerHTML += `<button id="delete-all-archived" class="delete-all-button">Borrar Todo</button>`;
+            
             archivedSnapshot.forEach((doc) => {
                 const debt = doc.data();
                 const row = document.createElement("div");
-                row.classList.add("archived-row");
                 row.innerHTML = `
-                    <p>${debt.date} - ${debt.person} - ${debt.amount.toFixed(2)} € - ${debt.description}</p>
+                    <span>${debt.date} - ${debt.person} - ${debt.amount.toFixed(2)} € - ${debt.description}</span>
+                    <button class="archive-button delete-button" data-id="${doc.id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
+                        </svg>
+                    </button>
                 `;
-                archivedDebtsContainer.appendChild(row);
+                document.getElementById("archived-debts").appendChild(row);
+            });
+            
+
+            // Funcionalidad para borrar una deuda archivada
+            document.querySelectorAll(".delete-button").forEach((button) => {
+                button.addEventListener("click", async (event) => {
+                    const debtId = event.currentTarget.dataset.id; // Obtiene el ID de la deuda
+                    const parentElement = event.currentTarget.parentElement; // Obtiene el elemento contenedor directo del botón
+
+                    // Borra la deuda en Firestore y elimina la fila manualmente
+                    try {
+                        await db.collection("debts").doc(debtId).delete();
+                        if (parentElement) {
+                            parentElement.remove(); // Elimina el contenedor completo del DOM
+                        }
+                    } catch (error) {
+                        console.error("Error al borrar la deuda:", error);
+                    }
+                });
+            });
+
+
+
+            // Funcionalidad para borrar todas las deudas archivadas
+            document.getElementById("delete-all-archived").addEventListener("click", async () => {
+                const confirmDelete = confirm("¿Estás seguro de que quieres borrar todas las deudas archivadas?");
+                if (confirmDelete) {
+                    const batch = db.batch();
+                    archivedSnapshot.forEach((doc) => {
+                        batch.delete(db.collection("debts").doc(doc.id));
+                    });
+                    await batch.commit();
+                    archivedDebtsContainer.innerHTML = "<p>No hay deudas archivadas.</p>";
+                }
             });
         } else {
             archivedDebtsContainer.innerHTML = "<p>No hay deudas archivadas.</p>";
@@ -202,3 +242,58 @@ document.getElementById("show-archived").addEventListener("click", async () => {
         archivedDebtsContainer.style.display = "none";
     }
 });
+
+            
+
+
+
+// Función para normalizar nombres (sin tildes ni mayúsculas)
+function normalizeName(name) {
+    return name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, ""); // Elimina acentos
+}
+
+// Botón para añadir deuda de bicicleta
+const bicingButton = document.getElementById("add-bicing-button");
+bicingButton.addEventListener("click", async () => {
+    let existingBicingDebt = null;
+
+    // Cargar todas las deudas no archivadas y buscar la deuda de "bicing" para Jana
+    const snapshot = await debtsCollection.where("archived", "==", false).get();
+    snapshot.forEach((doc) => {
+        const debt = doc.data();
+        if (
+            normalizeName(debt.person) === "jana" &&
+            debt.description.startsWith("bicing")
+        ) {
+            existingBicingDebt = { id: doc.id, data: debt };
+        }
+    });
+
+    if (existingBicingDebt) {
+        // Si ya existe una deuda de "bicing", actualizarla
+        const newAmount = existingBicingDebt.data.amount + 0.35;
+        const descriptionMatch = existingBicingDebt.data.description.match(/x(\d+)/);
+        const count = descriptionMatch ? parseInt(descriptionMatch[1]) + 1 : 2;
+        const newDescription = `bicing x${count}`;
+
+        await debtsCollection.doc(existingBicingDebt.id).update({
+            amount: newAmount,
+            description: newDescription,
+        });
+    } else {
+        // Si no existe ninguna deuda de "bicing", crear una nueva
+        await debtsCollection.add({
+            date: new Date().toLocaleDateString(),
+            person: "Jana", // Guardar el nombre original
+            amount: 0.35,
+            description: "bicing",
+            status: "not-paid",
+            archived: false, // Asegurarnos de que esta deuda no esté archivada
+        });
+    }
+});
+
+
