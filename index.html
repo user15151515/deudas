@@ -18,13 +18,12 @@
       <button id="add-button">Afegir Deuda</button>
     </div>
 
-    <!-- Tabla de deudas -->
     <table id="debt-table">
       <thead>
         <tr>
-          <th>Data</th>
-          <th>Qui</th>
-          <th>Quantitat</th>
+          <th id="sort-date" class="sortable">Data</th>
+          <th id="sort-person" class="sortable">Qui</th>
+          <th id="sort-amount" class="sortable">Quantitat</th>
           <th>Descripció</th>
           <th>Estat</th>
         </tr>
@@ -33,6 +32,7 @@
         <!-- Las filas se generan dinámicamente -->
       </tbody>
     </table>
+    
 
     <!-- Botón para añadir deuda de bicicleta -->
     <button id="add-bicing-button" class="bicing-button">Bicing</button>

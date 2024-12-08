@@ -296,4 +296,3 @@ bicingButton.addEventListener("click", async () => {
     }
 });
 
-
