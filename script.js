@@ -295,12 +295,12 @@ function updatePaymentSummary() {
 
     if (eliaTotal > janaTotal) {
         const amount = (eliaTotal - janaTotal).toFixed(2);
-        paymentSummary.textContent = `L'Èlia ha de pagar ${amount}€ a la Jana`;
+        paymentSummary.textContent = `l'èlia ha de pagar ${amount}€ a la jana`;
     } else if (janaTotal > eliaTotal) {
         const amount = (janaTotal - eliaTotal).toFixed(2);
-        paymentSummary.textContent = `La Jana ha de pagar ${amount}€ a l'Èlia`;
+        paymentSummary.textContent = `la jana ha de pagar ${amount}€ a l'èlia`;
     } else {
-        paymentSummary.textContent = `Ningú deu res 🥳`;
+        paymentSummary.textContent = `ningú deu res 🥳`;
     }
 }
 
