@@ -164,7 +164,6 @@ button.archive-button {
 button.archive-button svg {
     width: 16px; /* Tamaño del ícono */
     height: 16px;
-    fill: #48914b; /* Color del ícono */
     transition: transform 0.2s ease, opacity 0.2s ease; /* Animación suave */
 }
 
@@ -321,6 +320,25 @@ button.archive-button:hover svg {
     transform: scale(1.01); /* Ampliar un poco el botón */
 }
 
+/* Estilo para el botón de cerrar */
+.close-wizard {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2em;
+    color: white;
+    cursor: pointer;
+    z-index: 100;
+    transition: transform 0.3s, color 0.3s;
+  }
+  
+  .close-wizard:hover {
+    color: #ff6666;
+    transform: scale(1.2);
+  }
+  
 
   /* Animaciones */
   @keyframes fadeIn {

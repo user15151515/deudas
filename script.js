@@ -134,24 +134,64 @@ startAddDebt.addEventListener("click", () => {
   document.querySelectorAll(".next-button").forEach(button => {
     button.addEventListener("click", () => {
       const currentStep = button.closest(".step");
-      const nextStepId = button.dataset.next;
+      const input = currentStep.querySelector("input");
   
-      // Animar salida del paso actual
+      // Validar si el campo actual está vacío
+      if (!input.value.trim()) {
+        alert("Completa aquest camp abans de continuar!");
+        return;
+      }
+  
+      // Validar formato de número en el paso de cantidad
+      if (input.id === "wizard-amount") {
+        const amountValue = input.value.replace(",", "."); // Cambiar coma por punto
+        if (isNaN(parseFloat(amountValue))) {
+          alert("Introdueix un valor numèric vàlid!");
+          return;
+        }
+      }
+  
+      const nextStepId = button.dataset.next;
       currentStep.style.animation = "fadeOut 0.5s forwards";
       setTimeout(() => {
         currentStep.classList.add("hidden");
         currentStep.style.animation = ""; // Resetear animación
         document.getElementById(nextStepId).classList.remove("hidden");
         document.getElementById(nextStepId).style.animation = "fadeIn 0.5s ease-in-out";
-      }, 500); // Coincide con duración de fadeOut
+      }, 500);
     });
   });
   
+  const closeWizardButton = document.getElementById("close-wizard");
+
+// Función para cerrar el wizard
+function closeWizard() {
+  wizard.style.animation = "fadeOut 0.5s forwards";
+  setTimeout(() => {
+    wizard.classList.remove("visible");
+    wizard.style.animation = ""; // Resetear animación
+    startAddDebt.classList.remove("hidden");
+  }, 500);
+}
+
+// Event listener para cerrar el wizard con la cruz
+closeWizardButton.addEventListener("click", closeWizard);
+
+// Event listener para cerrar con "ESC"
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && wizard.classList.contains("visible")) {
+    closeWizard();
+  }
+});
+
+
   // Ocultar wizard y resetear al añadir deuda
 // Ocultar wizard y resetear al añadir deuda
 addDebtButton.addEventListener("click", async () => {
     debtData.name = document.getElementById("wizard-name").value.trim();
-    debtData.amount = parseFloat(document.getElementById("wizard-amount").value);
+    let amountValue = document.getElementById("wizard-amount").value.trim();
+    amountValue = parseFloat(amountValue.replace(",", ".")); // Convertir a número
+    debtData.amount = parseFloat(amountValue.toFixed(2)); // Asegurar dos decimales
     debtData.description = document.getElementById("wizard-description").value.trim();
 
     if (!debtData.name || isNaN(debtData.amount) || !debtData.description) {
@@ -177,7 +217,7 @@ addDebtButton.addEventListener("click", async () => {
         startAddDebt.classList.remove("hidden");
     }, 500);
 });
-    
+
   
   
 

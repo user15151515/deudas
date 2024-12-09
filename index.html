@@ -26,6 +26,7 @@
     <button id="start-add-debt" class="primary-button">Afegir Deuda</button>
 
     <div id="wizard" class="wizard hidden">
+      <button class="close-wizard" id="close-wizard">&times;</button>
       <div id="step-name" class="step">
         <h2>Qui?</h2>
         <input type="text" id="wizard-name" placeholder="Escriu el nom" />
@@ -33,7 +34,7 @@
       </div>
       <div id="step-amount" class="step hidden">
         <h2>Quant?</h2>
-        <input type="number" id="wizard-amount" placeholder="Escriu la quantitat" />
+        <input type="text" id="wizard-amount" placeholder="Escriu la quantitat" />
         <button class="next-button" data-next="step-description">Següent</button>
       </div>
       <div id="step-description" class="step hidden">
@@ -42,6 +43,7 @@
         <button id="add-debt-button" class="primary-button">Afegir</button>
       </div>
     </div>
+    
     
     
 
