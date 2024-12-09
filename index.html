@@ -7,16 +7,43 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <nav class="main-menu">
+    <div class="menu-content">
+        <a href="https://user15151515.github.io/jana/" class="menu-item">
+            <img src="casa.png" alt="Inicio" class="home-icon">
+        </a>
+        <div class="summary-text" id="payment-summary">
+            Ningú deu res 🥳
+        </div>
+    </div>
+</nav>
+
+
   <div class="container">
-    <h1>deudas🥰🥰🤞🤞</h1>
 
     <!-- Formulario para añadir deudas -->
-    <div class="form-container">
-      <input type="text" id="person" placeholder="qui" />
-      <input type="number" id="amount" placeholder="quant" />
-      <input type="text" id="description" placeholder="per què" />
-      <button id="add-button">Afegir Deuda</button>
+    <button id="start-add-debt" class="primary-button">Afegir Deuda</button>
+
+    <div id="wizard" class="wizard hidden">
+      <div id="step-name" class="step">
+        <h2>Nom?</h2>
+        <input type="text" id="wizard-name" placeholder="Escriu el nom" />
+        <button class="next-button" data-next="step-amount">Següent</button>
+      </div>
+      <div id="step-amount" class="step hidden">
+        <h2>Quant?</h2>
+        <input type="number" id="wizard-amount" placeholder="Escriu la quantitat" />
+        <button class="next-button" data-next="step-description">Següent</button>
+      </div>
+      <div id="step-description" class="step hidden">
+        <h2>Per què?</h2>
+        <input type="text" id="wizard-description" placeholder="Descripció breu" />
+        <button id="add-debt-button" class="primary-button">Afegir</button>
+      </div>
     </div>
+    
+    
 
     <table id="debt-table">
       <thead>
@@ -37,13 +64,7 @@
     <!-- Botón para añadir deuda de bicicleta -->
     <button id="add-bicing-button" class="bicing-button">Bicing</button>
 
-    <!-- Resumen total -->
-    <div id="summary">
-      Total: <span id="total-amount">0</span> 
-    </div>
-  </div>
-
-  <div id="payment-summary" class="payment-summary"></div>
+    
 
   <button id="show-archived" class="show-archived">Mostrar deudas archivadas</button>
   <div id="archived-debts" class="archived-debts" style="display: none;"></div>

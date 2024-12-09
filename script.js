@@ -12,6 +12,7 @@ const firebaseConfig = {
   // Inicializar Firebase y Firestore
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+  const debtsCollection = db.collection("debts");
   
   // Elementos del DOM
   const personInput = document.getElementById("person");
@@ -42,12 +43,13 @@ const firebaseConfig = {
 
   
 // Escuchar cambios en Firestore para actualizar la tabla automáticamente
-const debtsCollection = db.collection("debts");
+
 
 
 debtsCollection.onSnapshot((snapshot) => {
-    debtTable.innerHTML = ""; // Limpiar tabla
-    totalsByPerson = { elia: 0, jana: 0 }; // Reiniciar totales
+    // Reiniciar la tabla y totales
+    debtTable.innerHTML = "";
+    totalsByPerson = { elia: 0, jana: 0 };
 
     snapshot.forEach((doc) => {
         const debt = doc.data();
@@ -55,7 +57,7 @@ debtsCollection.onSnapshot((snapshot) => {
         // Mostrar solo deudas no archivadas
         if (debt.archived) return;
 
-        // Actualizar los totales por persona solo si la deuda no está pagada
+        // Calcular totales para personas con deudas activas
         if (debt.status !== "completed") {
             const person = normalizeName(debt.person);
             if (totalsByPerson[person] !== undefined) {
@@ -63,6 +65,7 @@ debtsCollection.onSnapshot((snapshot) => {
             }
         }
 
+        // Crear filas dinámicamente en la tabla
         const row = document.createElement("tr");
         row.classList.add(debt.status);
         row.innerHTML = `
@@ -77,16 +80,25 @@ debtsCollection.onSnapshot((snapshot) => {
             </td>
         `;
 
-        // Añadir botón de archivar si está pagada
-        if (debt.status === "completed") {
-            addArchiveButton(row, doc.id);
-        }
+        // Añadir el botón de papelera si corresponde
+        addArchiveButton(row, doc.id);
 
+        // Configurar botones para cambiar el estado de la deuda
         const completeButton = row.querySelector(".completed-button");
         completeButton.addEventListener("click", async () => {
             const newStatus = debt.status === "not-paid" ? "completed" : "not-paid";
             await db.collection("debts").doc(doc.id).update({ status: newStatus });
+
+            // Cambiar clases y texto dinámicamente
+            completeButton.classList.toggle("completed");
+            completeButton.classList.toggle("not-paid");
+            completeButton.textContent = newStatus === "completed" ? "Marcar como no pagada" : "Marcar como pagada";
+
+            // Actualizar estilos de la fila
+            row.classList.toggle("completed");
+            row.classList.toggle("not-paid");
         });
+
 
         debtTable.appendChild(row);
     });
@@ -99,30 +111,76 @@ debtsCollection.onSnapshot((snapshot) => {
 
 
 
+
+
   // Añadir una nueva deuda a Firestore
-  addButton.addEventListener("click", async () => {
-    const person = normalizeName(personInput.value.trim());
-    const amount = parseFloat(amountInput.value);
-    const description = descriptionInput.value.trim();
+  const startAddDebt = document.getElementById("start-add-debt");
+  const wizard = document.getElementById("wizard");
+  const steps = document.querySelectorAll(".step");
+  const addDebtButton = document.getElementById("add-debt-button");
   
-    if (!person || isNaN(amount) || amount <= 0 || !description) {
-      alert("ompleho tot puta");
-      return;
-    }
+  let debtData = {};
   
-    await debtsCollection.add({
-      date: new Date().toLocaleDateString(),
-      person: personInput.value.trim(),
-      amount: amount,
-      description: description,
-      status: "not-paid",
-    });
-  
-    // Limpiar los campos del formulario
-    personInput.value = "";
-    amountInput.value = "";
-    descriptionInput.value = "";
+// Mostrar el wizard con efecto de fundido
+startAddDebt.addEventListener("click", () => {
+    wizard.classList.add("visible");
+    wizard.style.animation = "fadeIn 0.5s ease-in-out"; // Animación de entrada
+    startAddDebt.classList.add("hidden");
+    steps.forEach(step => step.classList.add("hidden"));
+    document.getElementById("step-name").classList.remove("hidden");
   });
+  
+  // Cambiar entre pasos con animación
+  document.querySelectorAll(".next-button").forEach(button => {
+    button.addEventListener("click", () => {
+      const currentStep = button.closest(".step");
+      const nextStepId = button.dataset.next;
+  
+      // Animar salida del paso actual
+      currentStep.style.animation = "fadeOut 0.5s forwards";
+      setTimeout(() => {
+        currentStep.classList.add("hidden");
+        currentStep.style.animation = ""; // Resetear animación
+        document.getElementById(nextStepId).classList.remove("hidden");
+        document.getElementById(nextStepId).style.animation = "fadeIn 0.5s ease-in-out";
+      }, 500); // Coincide con duración de fadeOut
+    });
+  });
+  
+  // Ocultar wizard y resetear al añadir deuda
+// Ocultar wizard y resetear al añadir deuda
+addDebtButton.addEventListener("click", async () => {
+    debtData.name = document.getElementById("wizard-name").value.trim();
+    debtData.amount = parseFloat(document.getElementById("wizard-amount").value);
+    debtData.description = document.getElementById("wizard-description").value.trim();
+
+    if (!debtData.name || isNaN(debtData.amount) || !debtData.description) {
+        alert("Completa tots els camps!");
+        return;
+    }
+
+    // Agregar deuda a Firestore
+    await debtsCollection.add({
+        date: new Date().toLocaleDateString(),
+        person: debtData.name,
+        amount: debtData.amount,
+        description: debtData.description,
+        status: "not-paid",
+    });
+
+    // Resetear flujo y ocultar wizard con animación
+    debtData = {};
+    wizard.style.animation = "fadeOut 0.5s forwards";
+    setTimeout(() => {
+        wizard.classList.remove("visible");
+        wizard.style.animation = ""; // Resetear animación
+        startAddDebt.classList.remove("hidden");
+    }, 500);
+});
+    
+  
+  
+
   
 
 
@@ -131,14 +189,68 @@ debtsCollection.onSnapshot((snapshot) => {
 function updateTotals() {
     const eliaTotal = totalsByPerson.elia.toFixed(2);
     const janaTotal = totalsByPerson.jana.toFixed(2);
-    totalAmount.textContent = `Elia: ${eliaTotal} € | Jana: ${janaTotal} €`;
+
+    // Actualizar texto en el resumen
     updatePaymentSummary();
 }
 
+// Escuchar cambios en Firestore para actualizar la tabla automáticamente
+debtsCollection.onSnapshot((snapshot) => {
+    debtTable.innerHTML = ""; // Limpiar tabla
+    totalsByPerson = { elia: 0, jana: 0 }; // Reiniciar totales
+
+    snapshot.forEach((doc) => {
+        const debt = doc.data();
+
+        // Mostrar solo deudas no archivadas
+        if (debt.archived) return;
+
+        // Calcular totales para personas con deudas activas
+        if (debt.status !== "completed") {
+            const person = normalizeName(debt.person);
+            if (totalsByPerson[person] !== undefined) {
+                totalsByPerson[person] += debt.amount;
+            }
+        }
+
+        // Crear filas dinámicamente en la tabla
+        const row = document.createElement("tr");
+        row.classList.add(debt.status);
+        row.innerHTML = `
+            <td>${debt.date}</td>
+            <td>${debt.person}</td>
+            <td>${debt.amount.toFixed(2)} €</td>
+            <td>${debt.description}</td>
+            <td>
+                <button class="completed-button ${debt.status}">
+                    ${debt.status === "not-paid" ? "Marcar como pagada" : "Marcar como no pagada"}
+                </button>
+            </td>
+        `;
+
+        // Configurar botones para cambiar el estado de la deuda
+        const completeButton = row.querySelector(".completed-button");
+        completeButton.addEventListener("click", async () => {
+            const newStatus = debt.status === "not-paid" ? "completed" : "not-paid";
+            await db.collection("debts").doc(doc.id).update({ status: newStatus });
+        });
+
+            // Aquí llamamos a `addArchiveButton`
+        addArchiveButton(row, doc.id);
+
+        debtTable.appendChild(row);
+    });
+
+    // Actualizar los totales y el resumen
+    updateTotals();
+});
   // Actualiza el mensaje de quién debe pagar a quién
-  function updatePaymentSummary() {
+// Actualiza el mensaje de quién debe pagar a quién
+function updatePaymentSummary() {
     const eliaTotal = parseFloat(totalsByPerson.elia) || 0;
     const janaTotal = parseFloat(totalsByPerson.jana) || 0;
+
+    // Seleccionar el nuevo resumen en el menú
     const paymentSummary = document.getElementById("payment-summary");
 
     if (eliaTotal > janaTotal) {
@@ -152,6 +264,7 @@ function updateTotals() {
     }
 }
 
+
 function addArchiveButton(row, docId) {
     const archiveButton = document.createElement("button");
     archiveButton.classList.add("archive-button");
@@ -164,9 +277,10 @@ function addArchiveButton(row, docId) {
     `;
 
     archiveButton.addEventListener("click", async () => {
+        console.log("Archivando deuda con ID:", docId); // Depuración
         const debtRef = db.collection("debts").doc(docId);
         await debtRef.update({ archived: true });
-        row.remove(); // Elimina la deuda de la tabla principal
+        row.remove(); // Elimina la fila de la tabla principal
     });
 
     const lastCell = row.lastElementChild;

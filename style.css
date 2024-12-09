@@ -2,11 +2,11 @@
    Estilos Generales
 ============================ */
 body {
-    font-family: 'Roboto', Arial, sans-serif; /* Fuente moderna */
+    font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f9f9fb; /* Fondo neutro */
-    color: #444; /* Texto más legible */
+    background: #f9f9fb;
+    color: #444;
 }
 
 .container {
@@ -14,8 +14,8 @@ body {
     margin: 20px auto;
     padding: 20px;
     background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra más moderna */
+    margin-top: 70px; /* Espacio suficiente para compensar la altura de la barra */
+
 }
 
 h1 {
@@ -23,7 +23,6 @@ h1 {
     margin-bottom: 20px;
     font-size: 1.8em;
     color: #333;
-    text-transform: capitalize;
 }
 
 /* ============================
@@ -31,13 +30,13 @@ h1 {
 ============================ */
 .form-container {
     display: flex;
-    flex-wrap: wrap; /* Mejor acomodo en pantallas pequeñas */
+    flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 20px;
 }
 
 input, button {
-    flex: 1 1 calc(50% - 10px); /* Ajuste para móviles */
+    flex: 1 1 calc(50% - 10px);
     padding: 10px;
     font-size: 1em;
     border: 1px solid #ccc;
@@ -47,30 +46,13 @@ input, button {
 
 .bicing-button {
     padding: 8px 15px;
+    margin-top: 5px;
     font-size: 0.9em;
-    width: auto;
-    display: inline-block;
-    margin: 10px 0;
     background-color: #d90401;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-/* ============================
-   Botones Generales
-============================ */
-button {
-    background: #f1f1f5;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-button:hover {
-    background: #e3e3e5;
 }
 
 /* ============================
@@ -82,15 +64,19 @@ table {
     margin-top: 20px;
 }
 
-th {
-    padding: 12px;
+th, td {
+    padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #eee;
-    white-space: nowrap;
     background-color: #f1f1f5;
     font-weight: bold;
-    cursor: pointer;
+    vertical-align: middle; /* Asegura que el contenido esté centrado */
 }
+
+tr {
+    height: 50px; /* Altura mínima de las filas */
+}
+
 
 tr.not-paid td {
     background-color: #ffe5e6;
@@ -101,77 +87,45 @@ tr.completed td {
     background-color: #e7f5e7;
     color: #2e7d32;
     text-decoration: line-through;
-    white-space: nowrap;
 }
 
-/* ============================
-   Botones dentro de la Tabla
-============================ */
+/*Estilo general del boton de marcar*/
 
-/* Botones dentro de la tabla */
 .completed-button {
-    padding: 8px 12px; /* Espacio interno uniforme */
-    border-radius: 6px; /* Bordes redondeados */
-    font-size: 0.9em;
+    padding: 6px 10px; /* Reducir padding para que el texto no se divida */
+    border-radius: 6px;
+    font-size: 0.9em; /* Tamaño de texto más pequeño */
     border: none;
     color: white;
-    transition: all 0.3s ease;
-    text-align: center; /* Centrado del texto */
-    display: inline-block; /* Asegura proporciones consistentes */
+    white-space: nowrap; /* Evita el salto de línea en el texto */
+    min-height: 30px; /* Altura mínima consistente */
+    cursor: pointer;
 }
 
-td .completed-button.not-paid {
-    padding: 8px 12px !important; /* Forzar el mismo relleno interno */
-    border-radius: 6px !important; /* Forzar bordes redondeados */
-    font-size: 0.9em !important; /* Tamaño del texto consistente */
-    background-color: #e57373 !important; /* Color rojo claro */
-    border: none !important; /* Sin bordes */
-    color: white !important; /* Texto blanco */
-    display: inline-block !important; /* Asegura proporciones */
-    text-align: center !important; /* Centra el texto */
-    transition: all 0.3s ease !important; /* Transición uniforme */
-}
-
+/* Botón para deudas no pagadas */
 .completed-button.not-paid {
-    background-color: #d90401 !important;
-    color: white !important;
-    padding: 8px 12px !important;
-    border-radius: 6px !important;
-    border: none !important;
-    text-align: left !important; /* Esto lo alinea hacia la izquierda */
-    display: inline-block !important; /* Evita problemas de alineación */
-    margin-left: 0; /* Asegura que no haya márgenes adicionales */
+    background-color: #d90401;
 }
 
+/* Botón para deudas pagadas */
 .completed-button.completed {
     background-color: #81c784;
+    text-decoration: line-through; /* Texto tachado */
 }
 
 .completed-button:hover {
     opacity: 0.85;
 }
-
 /* ============================
    Resumen
 ============================ */
-#summary {
-    margin-top: 20px;
-    font-size: 1.2em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+.delete-all-button {
+
+    margin-bottom: 5px;
 }
 
-.payment-summary {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f5f7fa;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #444;
-}
+
 
 /* ============================
    Botón Mostrar deudas archivadas
@@ -185,7 +139,6 @@ td .completed-button.not-paid {
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    width: 100%;
     max-width: 300px;
 }
 
@@ -193,95 +146,353 @@ td .completed-button.not-paid {
     background-color: #5a6268;
 }
 
-/* ============================
-   Botón Archivar
-============================ */
+/* estilo de la papelera */
+
 button.archive-button {
-    background: none;
-    border: none;
+    margin-left: 2px; /* Espaciado menor a la izquierda */
+    background: none; /* Fondo transparente */
+    border: none; /* Sin bordes */
     padding: 0;
     margin: 0;
     display: inline-flex;
     align-items: center;
-    justify-content: left;
+    justify-content: flex-start;    
     cursor: pointer;
+    flex-direction: row-reverse;
 }
 
 button.archive-button svg {
-    width: 16px;
+    width: 16px; /* Tamaño del ícono */
     height: 16px;
-    fill: currentColor;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    fill: #48914b; /* Color del ícono */
+    transition: transform 0.2s ease, opacity 0.2s ease; /* Animación suave */
 }
 
 button.archive-button:hover svg {
-    transform: scale(1.1);
-    opacity: 0.8;
+    transform: scale(1.2); /* Ampliar un poco al pasar el ratón */
+    opacity: 0.8; /* Hacerlo ligeramente transparente */
 }
 
 /* ============================
-   Ajustes de Tabla
+   menu
 ============================ */
-td {
-    padding: 5px; /* Espacio interno */
-    vertical-align: middle; /* Centrado vertical */
-    grid-template-columns: 1fr auto; /* Distribuye contenido proporcionalmente */
-    gap: 10px; /* Espaciado entre los elementos */
+
+/* Menú fijo superior */
+/* Menú fijo superior */
+.main-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f1f1f5; /* Fondo claro */
+    display: flex;
+    align-items: center; /* Centra verticalmente los elementos */
+    justify-content: center; /* Centra horizontalmente los elementos */
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    z-index: 100;
 }
 
-td > * {
-    flex: 1; /* Desactiva el crecimiento de los elementos */
-    margin: 0; /* Elimina márgenes */
+/* Contenedor para casa y resumen */
+.menu-content {
+    display: flex;
+    align-items: center; /* Centra verticalmente casa y resumen */
 }
 
-td > .completed-button, td > .archive-button {
-    flex-shrink: 0; /* Los botones no deben reducirse */
+/* Estilo del icono de casa */
+.home-icon {
+    width: 40px; /* Tamaño del ícono */
+    height: 40px;
+    margin-right: 10px; /* Espacio entre la casa y el resumen */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    transition: transform 0.2s ease, opacity 0.2s ease; /* Animación suave */
+    filter: brightness(0) invert(0); /* Cambia el color del ícono a negro */
+    vertical-align: middle; /* Alineación vertical al texto */
+
 }
 
-td:last-child {
-    padding-right: 5px; /* Ajusta el margen derecho */
-    justify-content: flex-end; /* Alinea los botones al borde derecho */
-    align-items: right; /* Centrado vertical */
-    gap: 5px; /* Espacio entre los botones */
+.home-icon:hover {
+    transform: scale(1.1); /* Ampliar un poco al pasar el ratón */
+    opacity: 0.8; /* Suavizar el color al hacer hover */
 }
 
-td:last-child button {
-    margin: 0; /* Elimina márgenes externos */
-    padding: 5px; /* Tamaño interno controlado */
+/* Texto del resumen */
+.summary-text {
+    font-size: 1.5em; /* Texto más grande */
+    font-weight: bold;
+    color: black; /* Color del texto */
 }
 
-tr.not-paid button.archive-button {
-    color: #721c24;
+.table {
+    margin-top: 20px;
+  }
+  
+/* Ocultar elementos por defecto */
+.hidden {
+    display: none;
+  }
+  
+  /* Estilo general del wizard */
+  .wizard {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.9); /* Fondo más oscuro */
+    color: white;
+    z-index: 10;
+    opacity: 0; /* Inicialmente oculto */
+    pointer-events: none; /* Evita que bloquee la interacción cuando está oculto */
+    transition: opacity 0.5s ease-in-out; /* Transición al aparecer */
 }
 
-tr.completed button.archive-button {
-    color: #155724;
+  
+.wizard.visible {
+    opacity: 1;
+    display: flex;
+    pointer-events: auto; /* Permite la interacción cuando está visible */
 }
+
+  
+  /* Estilo de cada paso */
+  .step {
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .step h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #ffffff;
+  }
+  
+  .step input {
+    font-size: 1.2em;
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background: #333;
+    color: white;
+  }
+  
+  .next-button, .primary-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    background-color: #48914b;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.2s, background-color 0.3s;
+  }
+  
+  .next-button:hover, .primary-button:hover {
+    transform: scale(1.05);
+    background-color: #367c3a;
+  }
+  
+
+  #start-add-debt {
+    display: block;
+    margin: 0 auto 20px auto; /* Centrar con margen superior/inferior */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 800px; /* Máximo ancho igual a la tabla */
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: #63c668;; /* Color principal */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+#start-add-debt:hover {
+    background-color: #37c23e;; /* Color más oscuro al pasar el ratón */
+    transform: scale(1.01); /* Ampliar un poco el botón */
+}
+
+
+  /* Animaciones */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* ============================
    Estilos Responsivos
 ============================ */
 @media (max-width: 768px) {
+    /* Contenedor */
+    .container {
+        padding: 15px;
+    }
+
+    /* Título */
+    h1 {
+        font-size: 1.5em;
+    }
+
+    /* Formulario */
     .form-container {
-        flex-direction: column;
+        flex-direction: column; /* Elementos en columna */
+        gap: 10px; /* Espaciado reducido */
     }
 
     input, button {
-        flex: 1 1 100%;
+        flex: 1 1 100%; /* Ocupan todo el ancho */
+        font-size: 0.9em; /* Tamaño más pequeño */
     }
 
+    /* Botón Bicing */
+    .bicing-button {
+        font-size: 0.8em;
+        padding: 6px 10px; /* Reducir espacio interno */
+    }
+
+    /* Tabla */
     table {
-        font-size: 0.9em;
+        font-size: 0.85em; /* Reducir tamaño de fuente */
+        display: block; /* Hacer la tabla desplazable */
+        overflow-x: auto; /* Permitir desplazamiento horizontal */
+        white-space: nowrap; /* Evitar que el contenido se corte */
+        align-self: center;
     }
 
+    /* Botón de Marcar como Pagada */
+    .completed-button {
+        font-size: 0.8em;
+        padding: 5px 8px;
+    }
+
+    /* Resumen */
     #summary {
         flex-direction: column;
+        align-items: center;
         text-align: center;
+        gap: 10px; /* Espaciado entre elementos */
     }
+
+    /* Botón Mostrar deudas archivadas */
+    #show-archived {
+        font-size: 0.9em;
+        max-width: 90%; /* Botón más ancho */
+    }
+
+    .form-container {
+        gap: 8px; /* Reducir espacio entre elementos */
+    }
+
+    input, button {
+        font-size: 0.8em; /* Tamaño más pequeño */
+        padding: 6px 8px; /* Reducir padding */
+    }
+
+    #add-button {
+        flex: none; /* Evitar que ocupe todo el ancho */
+        width: 100%; /* Ajustarlo al ancho disponible */
+    }
+
+        /* Menú fijo superior */
+        .main-menu {
+            flex-direction: row; /* Mantén los elementos en fila */
+            padding: 5px 10px; /* Reduce el padding */
+        }
+    
+        /* Contenedor para casa y resumen */
+        .menu-content {
+            flex-direction: row; /* Asegura que sigan en fila */
+            align-items: center; /* Centra verticalmente los elementos */
+            gap: 5px; /* Espacio reducido entre icono y resumen */
+            flex-wrap: nowrap; /* Evita que se rompan en líneas diferentes */
+        }
+    
+        /* Icono de casa */
+        .home-icon {
+            width: 24px; /* Tamaño más pequeño para ajustarse */
+            height: 24px;
+        }
+    
+        /* Texto del resumen */
+        .summary-text {
+            font-size: 1em; /* Reducir tamaño del texto */
+            white-space: nowrap; /* Evita que el texto salte de línea */
+            overflow: hidden; /* Recorta si es demasiado largo */
+            text-overflow: ellipsis; /* Añade puntos suspensivos si es necesario */
+        }
+
+        #start-add-debt {
+            padding: 10px;
+            font-size: 1em;
+        }
+
 }
 
-/* añadido */
 
-.completed-button + .archive-button {
-    margin-left: 0; /* Elimina cualquier espacio adicional */
-}
+
