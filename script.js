@@ -432,7 +432,7 @@ function makeCellEditable(cell, fieldKey, docId) {
 function addEditButton(row, docId) {
     const editButton = document.createElement("button");
     editButton.classList.add("edit-button");
-    editButton.innerHTML = `<img src="lapiz.png" alt="Editar" style="width: 16px; height: 16px;">`;
+    editButton.innerHTML = `<img src="imagenes/lapiz.png" alt="Editar" style="width: 16px; height: 16px;">`;
 
     editButton.addEventListener("click", () => {
         // Convertir todas las celdas editables en inputs
@@ -521,56 +521,42 @@ document.getElementById("show-archived").addEventListener("click", async () => {
 
         const archivedSnapshot = await db.collection("debts").where("archived", "==", true).get();
         if (!archivedSnapshot.empty) {
-            // Botón para borrar todo
-            archivedDebtsContainer.innerHTML += `<button id="delete-all-archived" class="delete-all-button">Borrar Todo</button>`;
-            
             archivedSnapshot.forEach((doc) => {
                 const debt = doc.data();
-                const row = document.createElement("div");
-                row.innerHTML = `
-                    <span>${debt.date} - ${debt.person} - ${debt.amount.toFixed(2)} € - ${debt.description}</span>
-                    <button class="archive-button delete-button" data-id="${doc.id}">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
-                        </svg>
-                    </button>
+                const card = document.createElement("div");
+                card.classList.add("archived-card");
+                card.innerHTML = `
+                    <h4>${debt.person}</h4>
+                    <p>${debt.amount.toFixed(2)} €</p>
+                    <p>${debt.description}</p>
+                    <p>${debt.date}</p>
+                    <div class="archived-actions">
+                        <button class="delete-button" data-id="${doc.id}">Eliminar</button>
+                    </div>
                 `;
-                document.getElementById("archived-debts").appendChild(row);
+                archivedDebtsContainer.appendChild(card);
+                
             });
-            
 
-            // Funcionalidad para borrar una deuda archivada
+            // Añadir funcionalidad para borrar deudas individuales
             document.querySelectorAll(".delete-button").forEach((button) => {
                 button.addEventListener("click", async (event) => {
-                    const debtId = event.currentTarget.dataset.id; // Obtiene el ID de la deuda
-                    const parentElement = event.currentTarget.parentElement; // Obtiene el elemento contenedor directo del botón
-
-                    // Borra la deuda en Firestore y elimina la fila manualmente
                     try {
+                        const debtId = event.currentTarget.dataset.id; // ID de la deuda
+                        const card = event.currentTarget.closest(".archived-card"); // Tarjeta a eliminar
+                        if (!card) throw new Error("No se encontró la tarjeta para eliminar.");
+            
+                        // Eliminar la deuda en Firestore
                         await db.collection("debts").doc(debtId).delete();
-                        if (parentElement) {
-                            parentElement.remove(); // Elimina el contenedor completo del DOM
-                        }
+            
+                        // Eliminar la tarjeta del DOM
+                        card.remove();
                     } catch (error) {
-                        console.error("Error al borrar la deuda:", error);
+                        console.error("Error al eliminar la deuda archivada:", error);
                     }
                 });
             });
-
-
-
-            // Funcionalidad para borrar todas las deudas archivadas
-            document.getElementById("delete-all-archived").addEventListener("click", async () => {
-                const confirmDelete = confirm("¿Estás seguro de que quieres borrar todas las deudas archivadas?");
-                if (confirmDelete) {
-                    const batch = db.batch();
-                    archivedSnapshot.forEach((doc) => {
-                        batch.delete(db.collection("debts").doc(doc.id));
-                    });
-                    await batch.commit();
-                    archivedDebtsContainer.innerHTML = "<p>No hay deudas archivadas.</p>";
-                }
-            });
+            
         } else {
             archivedDebtsContainer.innerHTML = "<p>No hay deudas archivadas.</p>";
         }

@@ -1,6 +1,11 @@
 /* ============================
    Estilos Generales
 ============================ */
+:root {
+    --grisclaro: #f1f1f5;
+    --grisoscuro: #607D8B ;
+  }
+
 body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
@@ -135,16 +140,19 @@ tr.completed td {
     display: block;
     margin: 15px auto;
     padding: 10px 20px;
-    background-color: #6c757d;
+    background-color: var(--grisoscuro);
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     max-width: 300px;
+    transition: transform 0.3s
 }
 
+
+
 #show-archived:hover {
-    background-color: #5a6268;
+    transform: scale(1.01); /* Ampliar un poco el botón */
 }
 
 /* estilo de la papelera */
@@ -308,7 +316,7 @@ button.archive-button:hover svg {
     padding: 15px;
     font-size: 1.2em;
     font-weight: bold;
-    background-color: #6daa70;; /* Color principal */
+    background-color: var(--grisoscuro);; /* Color principal */
     color: white;
     border: none;
     border-radius: 8px;
@@ -317,7 +325,6 @@ button.archive-button:hover svg {
 }
 
 #start-add-debt:hover {
-    background-color: #68a66d;; /* Color más oscuro al pasar el ratón */
     transform: scale(1.01); /* Ampliar un poco el botón */
 }
 
@@ -422,6 +429,67 @@ td.editable-cell {
 
 
 
+.archived-debts {
+    display: grid !important; /* Forzar el grid */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important; /* Usar auto-fill */
+    gap: 0.5rem !important; /* Reduce el espacio entre tarjetas */
+    width: 100% !important;
+    /* Elimina el max-width si es innecesario */
+    margin: 0 auto;
+    align-items: center;
+    justify-items: center
+}
+
+
+
+.archived-card {
+    background: linear-gradient(135deg, #ffffff, #f1f1f5);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 10px; /* Mantener el padding reducido */
+    width: 90%; /* Tamaño más pequeño para las tarjetas */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+    transform: none; /* Asegurarse de que no haya escala aplicada */
+}
+
+
+.archived-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.archived-card h4 {
+    margin: 5px 0;
+    font-size: 1.2em;
+    color: #444;
+}
+
+.archived-card p {
+    margin: 5px 0;
+    font-size: 1em;
+    color: #666;
+}
+
+.archived-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.archived-actions button {
+    background: #8f9aa3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.archived-actions button:hover {
+    background-color: #818b93;
+}
 
 
 
@@ -511,6 +579,18 @@ td.editable-cell {
         text-align: center;
         gap: 10px; /* Espaciado entre elementos */
     }
+
+    .archived-debts {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important; /* Hacer las tarjetas más pequeñas */
+        gap: 0.25rem !important; /* Reducir el espacio entre las tarjetas */
+    }
+
+    .archived-card {
+        width: 150px !important; /* Reducir el ancho de las tarjetas */
+        padding: 8px !important; /* Reducir padding para hacerlas más compactas */
+    }
+
+
 
     /* Botón Mostrar deudas archivadas */
     #show-archived {
