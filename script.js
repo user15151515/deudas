@@ -360,20 +360,17 @@ function addEditButton(row, docId) {
     const lastCell = row.lastElementChild;
     lastCell.appendChild(editButton);
 }
+
 function makeCellEditable(cell, fieldKey, docId) {
     const originalValue = cell.textContent.trim();
 
-    // Añadir clase para asegurar compatibilidad de estilo
-    cell.classList.add("editable-cell");
-
-    // Crear un input que ocupe toda la celda
+    // Crear un input y configurarlo
     const input = document.createElement("input");
     input.type = fieldKey === "amount" ? "number" : "text";
-    input.value = fieldKey === "amount" ? parseFloat(originalValue) || 0 : originalValue;
+    input.value = originalValue;
     input.className = "edit-input";
-
-    // Reemplazar contenido de la celda por el input
-    cell.innerHTML = "";
+    input.style.width = `${Math.max(originalValue.length + 1, 5)}ch`; // Ajustar ancho al texto
+    cell.innerHTML = ""; // Vaciar celda
     cell.appendChild(input);
     input.focus();
 
@@ -392,41 +389,42 @@ function makeCellEditable(cell, fieldKey, docId) {
             cell.textContent = originalValue;
         }
 
-        // Eliminar clase editable después de guardar
-        cell.classList.remove("editable-cell");
-
-        // Remover los event listeners para evitar duplicados
-        document.removeEventListener("click", handleOutsideClick);
-        document.removeEventListener("keydown", handleKeyDown);
+        cleanup(); // Eliminar listeners globales
     };
 
-    // Función para cancelar cambios al pulsar ESC o hacer clic fuera del input
+    // Función para cancelar cambios
     const cancelChanges = () => {
-        cell.textContent = originalValue; // Restaurar el valor original
-        cell.classList.remove("editable-cell");
-        document.removeEventListener("click", handleOutsideClick);
-        document.removeEventListener("keydown", handleKeyDown);
+        cell.textContent = originalValue;
+        cleanup(); // Eliminar listeners globales
     };
 
-    // Detectar clic fuera del input
+    // Detectar clic fuera del input o toque (móviles)
     const handleOutsideClick = (event) => {
         if (!cell.contains(event.target)) {
-            saveChanges();
+            saveChanges(); // Guardar si el clic/gesto está fuera del input
         }
     };
 
-    // Detectar teclas (ESC para cancelar)
+    // Detectar teclas para guardar o cancelar
     const handleKeyDown = (event) => {
         if (event.key === "Escape") {
-            cancelChanges();
+            cancelChanges(); // Cancelar al pulsar Escape
         } else if (event.key === "Enter") {
-            saveChanges();
+            saveChanges(); // Guardar al pulsar Enter
         }
+    };
+
+    // Limpiar listeners al finalizar edición
+    const cleanup = () => {
+        document.removeEventListener("click", handleOutsideClick);
+        document.removeEventListener("touchstart", handleOutsideClick);
+        input.removeEventListener("keydown", handleKeyDown);
     };
 
     // Agregar listeners globales
     document.addEventListener("click", handleOutsideClick);
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("touchstart", handleOutsideClick);
+    input.addEventListener("keydown", handleKeyDown);
 }
 
 
