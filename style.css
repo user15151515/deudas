@@ -3,7 +3,8 @@
 ============================ */
 :root {
     --grisclaro: #f1f1f5;
-    --grisoscuro: #607D8B ;
+    --grisoscuro: #90A4AE ;
+    --grisoscurohover: #7f9098;
   }
 
 body {
@@ -478,7 +479,7 @@ td.editable-cell {
 }
 
 .archived-actions button {
-    background: #8f9aa3;
+    background: var(--grisoscuro);
     color: white;
     border: none;
     border-radius: 5px;
