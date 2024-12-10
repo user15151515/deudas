@@ -393,7 +393,7 @@ button.edit-button:hover img {
 /* Borde redondeado solo alrededor del contenido */
 .edit-input {
     display: block; /* Asegurar que ocupe todo el ancho */
-    width: 100%; /* Ancho completo de la celda */
+    width: 120%; /* Ancho completo de la celda */
     height: 100%; /* Altura completa de la celda */
     padding: 4px; /* Espaciado interno */
     font-size: 1em;

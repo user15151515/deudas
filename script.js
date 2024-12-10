@@ -360,7 +360,6 @@ function addEditButton(row, docId) {
     const lastCell = row.lastElementChild;
     lastCell.appendChild(editButton);
 }
-
 function makeCellEditable(cell, fieldKey, docId) {
     const originalValue = cell.textContent.trim();
 
@@ -378,7 +377,7 @@ function makeCellEditable(cell, fieldKey, docId) {
     cell.appendChild(input);
     input.focus();
 
-    // Guardar cambios al salir del input o presionar Enter
+    // Función para guardar cambios
     const saveChanges = async () => {
         const newValue = fieldKey === "amount"
             ? parseFloat(input.value) || 0
@@ -395,14 +394,39 @@ function makeCellEditable(cell, fieldKey, docId) {
 
         // Eliminar clase editable después de guardar
         cell.classList.remove("editable-cell");
+
+        // Remover los event listeners para evitar duplicados
+        document.removeEventListener("click", handleOutsideClick);
+        document.removeEventListener("keydown", handleKeyDown);
     };
 
-    input.addEventListener("blur", saveChanges);
-    input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            input.blur();
+    // Función para cancelar cambios al pulsar ESC o hacer clic fuera del input
+    const cancelChanges = () => {
+        cell.textContent = originalValue; // Restaurar el valor original
+        cell.classList.remove("editable-cell");
+        document.removeEventListener("click", handleOutsideClick);
+        document.removeEventListener("keydown", handleKeyDown);
+    };
+
+    // Detectar clic fuera del input
+    const handleOutsideClick = (event) => {
+        if (!cell.contains(event.target)) {
+            saveChanges();
         }
-    });
+    };
+
+    // Detectar teclas (ESC para cancelar)
+    const handleKeyDown = (event) => {
+        if (event.key === "Escape") {
+            cancelChanges();
+        } else if (event.key === "Enter") {
+            saveChanges();
+        }
+    };
+
+    // Agregar listeners globales
+    document.addEventListener("click", handleOutsideClick);
+    document.addEventListener("keydown", handleKeyDown);
 }
 
 
