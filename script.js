@@ -303,32 +303,192 @@ function updatePaymentSummary() {
         paymentSummary.textContent = `ningú deu res 🥳`;
     }
 }
+function addEditButton(row, docId) {
+    const editButton = document.createElement("button");
+    editButton.classList.add("edit-button");
+    editButton.innerHTML = `<img src="lapiz.png" alt="Editar" style="width: 16px; height: 16px;">`;
 
+    editButton.addEventListener("click", () => {
+        // Cambia cada celda editable a un campo de entrada
+        const editableCells = [
+            { cell: row.cells[1], key: "person" },
+            { cell: row.cells[2], key: "amount" },
+            { cell: row.cells[3], key: "description" },
+        ];
+
+        editableCells.forEach(({ cell, key }) => {
+            const initialValue = key === "amount"
+                ? parseFloat(cell.textContent) // Si es cantidad, convertir a número
+                : cell.textContent.trim(); // Para texto, mantener como string
+
+            // Reemplaza el contenido de la celda con un campo de entrada
+            cell.innerHTML = `<input type="${key === "amount" ? "number" : "text"}" 
+                                    value="${initialValue}" 
+                                    class="edit-input" 
+                                    ${key === "amount" ? "step='0.01'" : ""}>`;
+
+            const input = cell.querySelector("input");
+
+            // Al perder el foco o presionar Enter, guardar cambios
+            const saveChanges = async () => {
+                const newValue = key === "amount"
+                    ? parseFloat(input.value) || 0 // Evitar valores NaN
+                    : input.value.trim(); // Limpia el valor para texto
+
+                // Validar si hay cambios y guardar en Firestore
+                if (newValue !== initialValue) {
+                    const updateData = {};
+                    updateData[key] = newValue;
+                    await db.collection("debts").doc(docId).update(updateData);
+                    cell.textContent = key === "amount" ? `${newValue.toFixed(2)} €` : newValue;
+                } else {
+                    cell.textContent = initialValue; // Si no cambia, restaurar el valor original
+                }
+            };
+
+            input.addEventListener("blur", saveChanges); // Guardar al perder foco
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    input.blur(); // Forzar el evento blur al presionar Enter
+                }
+            });
+
+            input.focus(); // Enfocar automáticamente al habilitar edición
+        });
+    });
+
+    const lastCell = row.lastElementChild;
+    lastCell.appendChild(editButton);
+}
+
+function makeCellEditable(cell, fieldKey, docId) {
+    const originalValue = cell.textContent.trim();
+
+    // Añadir clase para asegurar compatibilidad de estilo
+    cell.classList.add("editable-cell");
+
+    // Crear un input que ocupe toda la celda
+    const input = document.createElement("input");
+    input.type = fieldKey === "amount" ? "number" : "text";
+    input.value = fieldKey === "amount" ? parseFloat(originalValue) || 0 : originalValue;
+    input.className = "edit-input";
+
+    // Reemplazar contenido de la celda por el input
+    cell.innerHTML = "";
+    cell.appendChild(input);
+    input.focus();
+
+    // Guardar cambios al salir del input o presionar Enter
+    const saveChanges = async () => {
+        const newValue = fieldKey === "amount"
+            ? parseFloat(input.value) || 0
+            : input.value.trim();
+
+        if (newValue !== originalValue) {
+            const updateData = {};
+            updateData[fieldKey] = newValue;
+            await db.collection("debts").doc(docId).update(updateData);
+            cell.textContent = fieldKey === "amount" ? `${newValue.toFixed(2)} €` : newValue;
+        } else {
+            cell.textContent = originalValue;
+        }
+
+        // Eliminar clase editable después de guardar
+        cell.classList.remove("editable-cell");
+    };
+
+    input.addEventListener("blur", saveChanges);
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            input.blur();
+        }
+    });
+}
+
+
+
+function addEditButton(row, docId) {
+    const editButton = document.createElement("button");
+    editButton.classList.add("edit-button");
+    editButton.innerHTML = `<img src="lapiz.png" alt="Editar" style="width: 16px; height: 16px;">`;
+
+    editButton.addEventListener("click", () => {
+        // Convertir todas las celdas editables en inputs
+        const editableCells = [
+            { cell: row.cells[1], key: "person" },
+            { cell: row.cells[2], key: "amount" },
+            { cell: row.cells[3], key: "description" },
+        ];
+
+        editableCells.forEach(({ cell, key }) => {
+            const originalValue = key === "amount"
+                ? parseFloat(cell.textContent) || 0
+                : cell.textContent.trim();
+
+            // Crear un input con el borde visible
+            const input = document.createElement("input");
+            input.type = key === "amount" ? "number" : "text";
+            input.value = originalValue;
+            input.className = "edit-input"; // Borde se aplica automáticamente
+            cell.innerHTML = ""; // Vaciar la celda antes de insertar el input
+            cell.appendChild(input);
+
+            // Guardar cambios al salir o presionar Enter
+            const saveChanges = async () => {
+                const newValue = key === "amount"
+                    ? parseFloat(input.value) || 0
+                    : input.value.trim();
+
+                if (newValue !== originalValue) {
+                    const updateData = {};
+                    updateData[key] = newValue;
+                    await db.collection("debts").doc(docId).update(updateData);
+                    cell.textContent = key === "amount" ? `${newValue.toFixed(2)} €` : newValue;
+                } else {
+                    cell.textContent = originalValue;
+                }
+            };
+
+            input.addEventListener("blur", saveChanges);
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    input.blur(); // Forzar guardar al presionar Enter
+                }
+            });
+        });
+    });
+
+    const lastCell = row.lastElementChild;
+    lastCell.appendChild(editButton);
+}
 
 function addArchiveButton(row, docId) {
     const archiveButton = document.createElement("button");
     archiveButton.classList.add("archive-button");
-
-    // Añadir el ícono de papelera al botón
-    archiveButton.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
-        </svg>
-    `;
+    archiveButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
+    </svg>`;
 
     archiveButton.addEventListener("click", async () => {
-        console.log("Archivando deuda con ID:", docId); // Depuración
         const debtRef = db.collection("debts").doc(docId);
         await debtRef.update({ archived: true });
-        row.remove(); // Elimina la fila de la tabla principal
+        row.remove();
     });
 
     const lastCell = row.lastElementChild;
-    lastCell.style.display = "flex"; // Asegura que los botones estén en línea
-    lastCell.style.alignItems = "center"; // Alinea verticalmente los botones
-    lastCell.style.gap = "10px"; // Espacio entre botones
+    lastCell.style.display = "flex";
+    lastCell.style.alignItems = "center";
+    lastCell.style.gap = "10px";
     lastCell.appendChild(archiveButton);
+
+    // Llamar a la función de añadir lápiz
+    addEditButton(row, docId, {
+        person: row.cells[1].textContent,
+        amount: parseFloat(row.cells[2].textContent),
+        description: row.cells[3].textContent
+    });
 }
+
 
 
 document.getElementById("show-archived").addEventListener("click", async () => {

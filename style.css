@@ -81,6 +81,7 @@ tr {
 tr.not-paid td {
     background-color: #ffe5e6;
     color: #b71c1c;
+    z-index: inherit;
 }
 
 tr.completed td {
@@ -362,9 +363,60 @@ button.archive-button:hover svg {
       transform: translateY(20px);
     }
   }
-  
 
+  button.edit-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-top: 5px;
+    scale: 75%;
+}
 
+button.edit-button img {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+button.edit-button:hover img {
+    transform: scale(1.2);
+    opacity: 0.8;
+}
+
+/* Estilo para celdas editables */
+/* Estilo para celdas editables */
+.editable {
+    cursor: pointer;
+}
+
+/* Borde redondeado solo alrededor del contenido */
+.edit-input {
+    display: block; /* Asegurar que ocupe todo el ancho */
+    width: 100%; /* Ancho completo de la celda */
+    height: 100%; /* Altura completa de la celda */
+    padding: 4px; /* Espaciado interno */
+    font-size: 1em;
+    border: 2px dashed black; /* Borde entrecortado negro */
+    border-radius: 8px; /* Bordes redondeados */
+    background-color: transparent; /* Fondo transparente para que se vea el color de la fila */
+    box-sizing: border-box; /* Incluir padding en el tamaño total */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Resaltar fila editable al pasar el ratón */
+.editable:hover {
+    background-color: #f0f0f0; /* Fondo más claro al pasar el ratón */
+}
+
+/* Estilo de las celdas durante la edición */
+td.editable-cell {
+    padding: 0; /* Eliminar el padding de la celda */
+    margin: 0; /* Eliminar márgenes */
+    text-align: left; /* Alinear texto a la izquierda */
+    vertical-align: middle; /* Centrar verticalmente el contenido */
+    background-color: inherit; /* Mantener el fondo de la fila */
+}
 
 
 
