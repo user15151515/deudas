@@ -3,7 +3,7 @@
 ============================ */
 :root {
     --grisclaro: #f1f1f5;
-    --grisoscuro: #90A4AE ;
+    --grisoscuro: #ff4081 ;
     --grisoscurohover: #7f9098;
   }
 
@@ -11,7 +11,7 @@ body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f9f9fb;
+    background: #ffefef;
     color: #444;
 }
 
@@ -19,7 +19,7 @@ body {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    background: #ffffff;
+    background: #ffefef;
     margin-top: 70px; /* Espacio suficiente para compensar la altura de la barra */
 
 }
@@ -54,7 +54,7 @@ input, button {
     padding: 8px 15px;
     margin-top: 5px;
     font-size: 0.9em;
-    background-color: #d90401;
+    background-color: #ff4081;
     color: white;
     border: none;
     border-radius: 5px;
@@ -111,7 +111,7 @@ tr.completed td {
 
 /* Botón para deudas no pagadas */
 .completed-button.not-paid {
-    background-color: #d90401;
+    background-color: #ff4081;
 }
 
 /* Botón para deudas pagadas */
@@ -193,7 +193,7 @@ button.archive-button:hover svg {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #f1f1f5; /* Fondo claro */
+    background-color: #ff4081; /* Fondo claro */
     display: flex;
     align-items: center; /* Centra verticalmente los elementos */
     justify-content: center; /* Centra horizontalmente los elementos */
@@ -215,7 +215,6 @@ button.archive-button:hover svg {
     margin-right: 10px; /* Espacio entre la casa y el resumen */
     cursor: pointer; /* Cambia el cursor al pasar el ratón */
     transition: transform 0.2s ease, opacity 0.2s ease; /* Animación suave */
-    filter: brightness(0) invert(0); /* Cambia el color del ícono a negro */
     vertical-align: middle; /* Alineación vertical al texto */
 
 }
@@ -229,7 +228,7 @@ button.archive-button:hover svg {
 .summary-text {
     font-size: 1.5em; /* Texto más grande */
     font-weight: bold;
-    color: black; /* Color del texto */
+    color: white; /* Color del texto */
 }
 
 .table {
