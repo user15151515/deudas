@@ -303,63 +303,7 @@ function updatePaymentSummary() {
         paymentSummary.textContent = `ningú deu res 🥳`;
     }
 }
-function addEditButton(row, docId) {
-    const editButton = document.createElement("button");
-    editButton.classList.add("edit-button");
-    editButton.innerHTML = `<img src="lapiz.png" alt="Editar" style="width: 16px; height: 16px;">`;
 
-    editButton.addEventListener("click", () => {
-        // Cambia cada celda editable a un campo de entrada
-        const editableCells = [
-            { cell: row.cells[1], key: "person" },
-            { cell: row.cells[2], key: "amount" },
-            { cell: row.cells[3], key: "description" },
-        ];
-
-        editableCells.forEach(({ cell, key }) => {
-            const initialValue = key === "amount"
-                ? parseFloat(cell.textContent) // Si es cantidad, convertir a número
-                : cell.textContent.trim(); // Para texto, mantener como string
-
-            // Reemplaza el contenido de la celda con un campo de entrada
-            cell.innerHTML = `<input type="${key === "amount" ? "number" : "text"}" 
-                                    value="${initialValue}" 
-                                    class="edit-input" 
-                                    ${key === "amount" ? "step='0.01'" : ""}>`;
-
-            const input = cell.querySelector("input");
-
-            // Al perder el foco o presionar Enter, guardar cambios
-            const saveChanges = async () => {
-                const newValue = key === "amount"
-                    ? parseFloat(input.value) || 0 // Evitar valores NaN
-                    : input.value.trim(); // Limpia el valor para texto
-
-                // Validar si hay cambios y guardar en Firestore
-                if (newValue !== initialValue) {
-                    const updateData = {};
-                    updateData[key] = newValue;
-                    await db.collection("debts").doc(docId).update(updateData);
-                    cell.textContent = key === "amount" ? `${newValue.toFixed(2)} €` : newValue;
-                } else {
-                    cell.textContent = initialValue; // Si no cambia, restaurar el valor original
-                }
-            };
-
-            input.addEventListener("blur", saveChanges); // Guardar al perder foco
-            input.addEventListener("keydown", (e) => {
-                if (e.key === "Enter") {
-                    input.blur(); // Forzar el evento blur al presionar Enter
-                }
-            });
-
-            input.focus(); // Enfocar automáticamente al habilitar edición
-        });
-    });
-
-    const lastCell = row.lastElementChild;
-    lastCell.appendChild(editButton);
-}
 
 function makeCellEditable(cell, fieldKey, docId) {
     const originalValue = cell.textContent.trim();

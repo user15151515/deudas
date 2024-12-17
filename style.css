@@ -2,16 +2,16 @@
    Estilos Generales
 ============================ */
 :root {
-    --grisclaro: #f1f1f5;
-    --grisoscuro: #ff4081 ;
-    --grisoscurohover: #7f9098;
+    --rosaclaro: #ffefef;
+    --rosaoscuro: #ff4081 ;
+    --rosaoscurohover: #ff3075;
   }
 
 body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #ffefef;
+    background: var(--rosaclaro);
     color: #444;
 }
 
@@ -19,7 +19,7 @@ body {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    background: #ffefef;
+    background: var(--rosaclaro);
     margin-top: 70px; /* Espacio suficiente para compensar la altura de la barra */
 
 }
@@ -141,7 +141,7 @@ tr.completed td {
     display: block;
     margin: 15px auto;
     padding: 10px 20px;
-    background-color: var(--grisoscuro);
+    background-color: var(--rosaoscuro);
     color: white;
     border: none;
     border-radius: 6px;
@@ -316,7 +316,7 @@ button.archive-button:hover svg {
     padding: 15px;
     font-size: 1.2em;
     font-weight: bold;
-    background-color: var(--grisoscuro);; /* Color principal */
+    background-color: var(--rosaoscuro);; /* Color principal */
     color: white;
     border: none;
     border-radius: 8px;
@@ -478,7 +478,7 @@ td.editable-cell {
 }
 
 .archived-actions button {
-    background: var(--grisoscuro);
+    background: var(--rosaoscuro);
     color: white;
     border: none;
     border-radius: 5px;
