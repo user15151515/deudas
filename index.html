@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>pagame</title>
+  <title>‎ </title>
   <link rel="icon" href="imagenes/logo.ico" type="image/x-icon">   
   <link rel="stylesheet" href="style.css">
 </head>
@@ -50,7 +50,7 @@
 
     <table id="debt-table">
       <thead>
-        <tr>
+        <tr id="cabezeros">
           <th id="sort-date" class="sortable">Data</th>
           <th id="sort-person" class="sortable">Qui</th>
           <th id="sort-amount" class="sortable">Quantitat</th>
@@ -65,8 +65,14 @@
     
 
     <!-- Botón para añadir deuda de bicicleta -->
-    <button id="add-bicing-button" class="bicing-button">Bicing</button>
-
+    <div class="bicing-container">
+      <span class="bicing-label">Bicing</span>
+      <div class="bicing-buttons">
+        <button id="subtract-bicing-button" class="bicing-button minus-button">-</button>
+        <button id="add-bicing-button" class="bicing-button plus-button">+</button>
+      </div>
+    </div>
+    
     
 
   <button id="show-archived" class="show-archived">Mostrar deudas archivadas</button>

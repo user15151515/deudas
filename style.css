@@ -12,7 +12,7 @@ body {
     margin: 0;
     padding: 0;
     background: var(--rosaclaro);
-    color: #444;
+    color: var(--rosaoscuro);
 }
 
 .container {
@@ -41,8 +41,9 @@ h1 {
     margin-bottom: 20px;
 }
 
-input, button {
+.form-container button, .form-container input {
     flex: 1 1 calc(50% - 10px);
+    /* ... resto de estilos ... */
     padding: 10px;
     font-size: 1em;
     border: 1px solid #ccc;
@@ -50,16 +51,9 @@ input, button {
     box-sizing: border-box;
 }
 
-.bicing-button {
-    padding: 8px 15px;
-    margin-top: 5px;
-    font-size: 0.9em;
-    background-color: #ff4081;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+
+
+
 
 /* ============================
    Tabla
@@ -74,7 +68,7 @@ th, td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #eee;
-    background-color: #f1f1f5;
+    background-color: #FFEBEB;
     font-weight: bold;
     vertical-align: middle; /* Asegura que el contenido esté centrado */
 }
@@ -98,31 +92,72 @@ tr.completed td {
 
 /*Estilo general del boton de marcar*/
 
-.completed-button {
-    padding: 6px 10px; /* Reducir padding para que el texto no se divida */
-    border-radius: 6px;
-    font-size: 0.9em; /* Tamaño de texto más pequeño */
-    border: none;
-    color: white;
-    white-space: nowrap; /* Evita el salto de línea en el texto */
-    min-height: 30px; /* Altura mínima consistente */
+/* Para centrar la casilla dentro de la columna "Estado" */
+td:nth-child(5) {
+    text-align: left !important; /* Fuerza a alinearse a la izquierda */
+
+  }
+  
+  /* Contenedor general del checkbox (label + input + span) */
+  .check-container {
+    display: inline-flex;     /* Para alinear internamente */
+    align-items: center;
+    justify-content: center;
+    position: relative;       /* Para posicionar la cajita y el tick */
+    width: 20px;              /* Ancho fijo */
+    height: 20px;             /* Alto fijo */
     cursor: pointer;
-}
-
-/* Botón para deudas no pagadas */
-.completed-button.not-paid {
-    background-color: #ff4081;
-}
-
-/* Botón para deudas pagadas */
-.completed-button.completed {
-    background-color: #81c784;
-    text-decoration: line-through; /* Texto tachado */
-}
-
-.completed-button:hover {
-    opacity: 0.85;
-}
+    user-select: none;        /* Evita que se seleccione el texto al hacer clic */
+    margin: 0 auto;           /* Para asegurar centrado dentro de la celda */
+  }
+  
+  /* Ocultamos el checkbox real (nativo) */
+  .check-container input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+  }
+  
+  /* El “checkmark”: la cajita visible */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 110%;                /* Ocupa todo el contenedor */
+    height: 100%;
+    background-color: #fff;      /* Fondo blanco */
+    border: 2px solid var(--rosaoscuro);
+    border-radius: 4px;          /* O 0 si prefieres esquinas cuadradas */
+    box-sizing: border-box;      /* Asegura que el borde no desplace el contenido */
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  
+  /* El tick (con un pseudo-elemento) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;  
+    width: 5px;
+    height: 10px;
+    border: solid #fff;         /* Color del tick */
+    border-width: 0 2px 2px 0;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  
+  /* Al marcar la casilla, se rellena de rosa y aparece el tick */
+  .check-container input:checked ~ .checkmark {
+    background-color: var(--rosaoscuro);
+    border-color: var(--rosaoscuro);
+  }
+  .check-container input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  
 /* ============================
    Resumen
 ============================ */
@@ -147,7 +182,9 @@ tr.completed td {
     border-radius: 6px;
     cursor: pointer;
     max-width: 300px;
-    transition: transform 0.3s
+    transition: transform 0.3s;
+    font-weight: 600; /* Negrita pero no tanto */
+
 }
 
 
@@ -166,14 +203,16 @@ button.archive-button {
     margin: 0;
     display: inline-flex;
     align-items: center;
-    justify-content: flex-start;    
+    justify-content: center;    
     cursor: pointer;
     flex-direction: row-reverse;
 }
 
 button.archive-button svg {
-    width: 16px; /* Tamaño del ícono */
-    height: 16px;
+    width: 20px; /* Tamaño del ícono */
+    height: 20px;
+    fill: var(--rosaoscuro); /* Asignarle tu color */
+
     transition: transform 0.2s ease, opacity 0.2s ease; /* Animación suave */
 }
 
@@ -307,12 +346,31 @@ button.archive-button:hover svg {
     background-color: #367c3a;
   }
   
+  .status-cell {
+    display: flex;
+    align-items: center;       /* centra verticalmente */
+    justify-content: space-between; /* separa izquierda y derecha */
+    width: 100%;               /* ocupar toda la celda */
+  }
+
+  .left-side {
+    /* No hace falta nada especial, si quieres lo dejas vacío */
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Contenedor derecho para archivar y lápiz */
+  .right-side {
+    display: flex;
+    align-items: center;
+    gap: 6px;   /* espaciado entre iconos */
+  }
+  
 
   #start-add-debt {
     display: block;
     margin: 0 auto 20px auto; /* Centrar con margen superior/inferior */
     width: 100%; /* Ocupa todo el ancho disponible */
-    max-width: 800px; /* Máximo ancho igual a la tabla */
     padding: 15px;
     font-size: 1.2em;
     font-weight: bold;
@@ -377,14 +435,19 @@ button.archive-button:hover svg {
     padding: 0;
     cursor: pointer;
     margin-top: 5px;
-    scale: 75%;
+    scale: 95%;
+    fill: var(--rosaoscuro); /* Asignarle tu color */
+    
+
 }
 
-button.edit-button img {
-    width: 16px;
-    height: 16px;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
+.edit-button svg {
+    width: 18px;              /* Ajusta a tu gusto */
+    height: 18px;
+    fill: var(--rosaoscuro);  /* El color rosa oscuro */
+    transition: transform 0.2s ease, fill 0.2s ease;
+  }
+
 
 button.edit-button:hover img {
     transform: scale(1.2);
@@ -496,39 +559,10 @@ td.editable-cell {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ============================
    Estilos Responsivos
 ============================ */
-@media (max-width: 768px) {
+@media (max-width: 550px) {
     /* Contenedor */
     .container {
         padding: 15px;
@@ -552,6 +586,7 @@ td.editable-cell {
 
     /* Botón Bicing */
     .bicing-button {
+        width: 100%; /* Ocupar todo el ancho */
         font-size: 0.8em;
         padding: 6px 10px; /* Reducir espacio interno */
     }
@@ -566,11 +601,7 @@ td.editable-cell {
     }
 
 
-    /* Botón de Marcar como Pagada */
-    .completed-button {
-        font-size: 0.8em;
-        padding: 5px 8px;
-    }
+
 
     /* Resumen */
     #summary {
@@ -594,8 +625,9 @@ td.editable-cell {
 
     /* Botón Mostrar deudas archivadas */
     #show-archived {
-        font-size: 0.9em;
         max-width: 90%; /* Botón más ancho */
+        padding: 9px;
+        font-size: 0.8em;
     }
 
     .form-container {
@@ -641,11 +673,73 @@ td.editable-cell {
         }
 
         #start-add-debt {
-            padding: 10px;
-            font-size: 1em;
+            padding: 6px;
+            font-size: 0.8em;
+        }
+
+        .bicing-container {
+            scale: 75%;
+            margin-left: 0px;
         }
 
 }
 
 
 
+
+
+
+
+
+
+/* ======= BICING CONTAINER (COMPACTO) ======= */
+.bicing-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #FFEBEB;
+    border: 1.6px solid var(--rosaoscuro);
+    border-radius: 15px;       /* Forma de píldora */
+    padding: 5px 12px;         /* Más pequeño */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    max-width: 250px;          /* Ancho más estrecho */
+    margin: 10px auto;         /* Separación top/bottom más sutil */
+  }
+  
+  .bicing-label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--rosaoscuro);
+    margin-right: 5px;
+  }
+  
+  /* Contenedor de los dos botones + y - */
+  .bicing-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  
+  /* ======= BOTONES BICING (+ y –) COMPACTOS ======= */
+  .bicing-button {
+    /* Otras propiedades que ya tienes */
+    display: inline-flex;       /* O flex, si prefieres ocupar todo el ancho */
+    align-items: center;        /* Centra verticalmente */
+    justify-content: center;    /* Centra horizontalmente */
+    font-size: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--rosaoscuro);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    /* ... etc */
+  }
+  
+  .bicing-button:hover {
+
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+
+  

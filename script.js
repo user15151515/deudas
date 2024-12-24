@@ -69,35 +69,59 @@ debtsCollection.onSnapshot((snapshot) => {
         const row = document.createElement("tr");
         row.classList.add(debt.status);
         row.innerHTML = `
-            <td>${debt.date}</td>
-            <td>${debt.person}</td>
-            <td>${debt.amount.toFixed(2)} €</td>
-            <td>${debt.description}</td>
-            <td>
-                <button class="completed-button ${debt.status}">
-                    ${debt.status === "not-paid" ? "Marcar como pagada" : "Marcar como no pagada"}
-                </button>
-            </td>
-        `;
+        <td>${debt.date}</td>
+        <td>${debt.person}</td>
+        <td>${debt.amount.toFixed(2)} €</td>
+        <td>${debt.description}</td>
+        <td>
+          <div class="status-cell">
+            <!-- Contenedor izquierdo: checkbox -->
+            <div class="left-side">
+              <label class="check-container">
+                <input
+                  type="checkbox"
+                  class="status-toggle"
+                  ${debt.status === "completed" ? "checked" : ""}
+                >
+                <span class="checkmark"></span>
+              </label>
+            </div>
+            
+            <!-- Contenedor derecho: iconos -->
+            <div class="right-side">
+              <button class="archive-button">
+                <!-- tu SVG de papelera -->
+              </button>
+              <button class="edit-button">
+                <!-- tu SVG de lápiz -->
+              </button>
+            </div>
+          </div>
+        </td>
+      `;
+      
+      
+      
+    
+    // Nuevo: Escuchar el checkbox en lugar del botón
+const statusCheckbox = row.querySelector(".status-toggle");
+statusCheckbox.addEventListener("change", async () => {
+    // Si está marcado => "completed", si no => "not-paid"
+    const newStatus = statusCheckbox.checked ? "completed" : "not-paid";
+    
+    // Actualizar en Firestore
+    await db.collection("debts").doc(doc.id).update({ status: newStatus });
+
+    // Opcional: actualizar la clase de la fila para que se ponga "completed" o "not-paid"
+    row.classList.toggle("completed", statusCheckbox.checked);
+    row.classList.toggle("not-paid", !statusCheckbox.checked);
+});
+
 
         // Añadir el botón de papelera si corresponde
         addArchiveButton(row, doc.id);
 
-        // Configurar botones para cambiar el estado de la deuda
-        const completeButton = row.querySelector(".completed-button");
-        completeButton.addEventListener("click", async () => {
-            const newStatus = debt.status === "not-paid" ? "completed" : "not-paid";
-            await db.collection("debts").doc(doc.id).update({ status: newStatus });
 
-            // Cambiar clases y texto dinámicamente
-            completeButton.classList.toggle("completed");
-            completeButton.classList.toggle("not-paid");
-            completeButton.textContent = newStatus === "completed" ? "Marcar como no pagada" : "Marcar como pagada";
-
-            // Actualizar estilos de la fila
-            row.classList.toggle("completed");
-            row.classList.toggle("not-paid");
-        });
 
 
         debtTable.appendChild(row);
@@ -257,23 +281,54 @@ debtsCollection.onSnapshot((snapshot) => {
         const row = document.createElement("tr");
         row.classList.add(debt.status);
         row.innerHTML = `
-            <td>${debt.date}</td>
-            <td>${debt.person}</td>
-            <td>${debt.amount.toFixed(2)} €</td>
-            <td>${debt.description}</td>
-            <td>
-                <button class="completed-button ${debt.status}">
-                    ${debt.status === "not-paid" ? "Marcar como pagada" : "Marcar como no pagada"}
-                </button>
-            </td>
-        `;
+        <td>${debt.date}</td>
+        <td>${debt.person}</td>
+        <td>${debt.amount.toFixed(2)} €</td>
+        <td>${debt.description}</td>
+        <td>
+          <div class="status-cell">
+            <!-- Contenedor izquierdo: checkbox -->
+            <div class="left-side">
+              <label class="check-container">
+                <input
+                  type="checkbox"
+                  class="status-toggle"
+                  ${debt.status === "completed" ? "checked" : ""}
+                >
+                <span class="checkmark"></span>
+              </label>
+            </div>
+            
+            <!-- Contenedor derecho: iconos -->
+            <div class="right-side">
+              <button class="archive-button">
+                <!-- tu SVG de papelera -->
+              </button>
+              <button class="edit-button">
+                <!-- tu SVG de lápiz -->
+              </button>
+            </div>
+          </div>
+        </td>
+      `;
+      
+      
+      
+    // Nuevo: Escuchar el checkbox en lugar del botón
+const statusCheckbox = row.querySelector(".status-toggle");
+statusCheckbox.addEventListener("change", async () => {
+    // Si está marcado => "completed", si no => "not-paid"
+    const newStatus = statusCheckbox.checked ? "completed" : "not-paid";
+    
+    // Actualizar en Firestore
+    await db.collection("debts").doc(doc.id).update({ status: newStatus });
 
-        // Configurar botones para cambiar el estado de la deuda
-        const completeButton = row.querySelector(".completed-button");
-        completeButton.addEventListener("click", async () => {
-            const newStatus = debt.status === "not-paid" ? "completed" : "not-paid";
-            await db.collection("debts").doc(doc.id).update({ status: newStatus });
-        });
+    // Opcional: actualizar la clase de la fila para que se ponga "completed" o "not-paid"
+    row.classList.toggle("completed", statusCheckbox.checked);
+    row.classList.toggle("not-paid", !statusCheckbox.checked);
+});
+
+
 
             // Aquí llamamos a `addArchiveButton`
         addArchiveButton(row, doc.id);
@@ -376,8 +431,15 @@ function makeCellEditable(cell, fieldKey, docId) {
 function addEditButton(row, docId) {
     const editButton = document.createElement("button");
     editButton.classList.add("edit-button");
-    editButton.innerHTML = `<img src="imagenes/lapiz.png" alt="Editar" style="width: 16px; height: 16px;">`;
-
+    editButton.innerHTML = `
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        viewBox="0 0 24 24" 
+        class="svg-pencil"
+      >
+        <path d="M2.25 16.0788V21.75H7.92125L18.0642 11.607L12.3938 5.93675L2.25 16.0788ZM21.2075 8.46375C21.5975 8.07375 21.5975 7.44125 21.2075 7.05125L16.9492 2.7925C16.5592 2.4025 15.9267 2.4025 15.5367 2.7925L13.485 4.84425L19.1567 10.515L21.2075 8.46375Z" />
+      </svg>
+    `;
     editButton.addEventListener("click", () => {
         // Convertir todas las celdas editables en inputs
         const editableCells = [
@@ -431,9 +493,14 @@ function addEditButton(row, docId) {
 function addArchiveButton(row, docId) {
     const archiveButton = document.createElement("button");
     archiveButton.classList.add("archive-button");
-    archiveButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
-    </svg>`;
+    archiveButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 24 24"
+     width="24"
+     height="24">
+  <path d="M20.54 5.23L19.15 3.9A2 2 0 0 0 17.8 3.34H6.15A2 2 0 0 0 4.8 3.9L3.46 5.23A1.99 1.99 0 0 0 3 6.75V19a2 2 0 0 0 2 2h14
+  a2 2 0 0 0 2-2V6.75c0-.53-.21-1.04-.59-1.42zm-1 13.77H4.99V8h14.05v11zM12 10c-.55 0-1 .45-1 1v3H9l3 3 3-3h-2v-3
+  c0-.55-.45-1-1-1z"/>
+</svg>`;
 
     archiveButton.addEventListener("click", async () => {
         const debtRef = db.collection("debts").doc(docId);
@@ -562,3 +629,82 @@ bicingButton.addEventListener("click", async () => {
     }
 });
 
+// Botones de Bicing
+const addBicingButton = document.getElementById("add-bicing-button");
+const subtractBicingButton = document.getElementById("subtract-bicing-button");
+
+// Evento para sumar Bicing (+)
+addBicingButton.addEventListener("click", async () => {
+  let existingBicingDebt = null;
+  const snapshot = await debtsCollection.where("archived", "==", false).get();
+
+  snapshot.forEach((doc) => {
+    const debt = doc.data();
+    if (
+      normalizeName(debt.person) === "jana" &&
+      debt.description.startsWith("bicing")
+    ) {
+      existingBicingDebt = { id: doc.id, data: debt };
+    }
+  });
+
+  if (existingBicingDebt) {
+    const newAmount = existingBicingDebt.data.amount + 0.35;
+    const descriptionMatch = existingBicingDebt.data.description.match(/x(\d+)/);
+    const count = descriptionMatch ? parseInt(descriptionMatch[1]) + 1 : 2;
+    const newDescription = `bicing x${count}`;
+
+    await debtsCollection.doc(existingBicingDebt.id).update({
+      amount: newAmount,
+      description: newDescription,
+    });
+  } else {
+    await debtsCollection.add({
+      date: new Date().toLocaleDateString(),
+      person: "Jana",
+      amount: 0.35,
+      description: "bicing",
+      status: "not-paid",
+      archived: false,
+    });
+  }
+});
+
+// Evento para restar Bicing (-)
+subtractBicingButton.addEventListener("click", async () => {
+  let existingBicingDebt = null;
+  const snapshot = await debtsCollection.where("archived", "==", false).get();
+
+  snapshot.forEach((doc) => {
+    const debt = doc.data();
+    if (
+      normalizeName(debt.person) === "jana" &&
+      debt.description.startsWith("bicing")
+    ) {
+      existingBicingDebt = { id: doc.id, data: debt };
+    }
+  });
+
+  // Si existe la deuda, restamos 0.35; si llega a 0 o menos, puedes decidir si eliminarla o dejarla en 0
+  if (existingBicingDebt) {
+    const newAmount = existingBicingDebt.data.amount - 0.35;
+    if (newAmount <= 0) {
+      // Opcional: Eliminar la deuda o ponerla a 0, a gusto
+      await debtsCollection.doc(existingBicingDebt.id).delete();
+    } else {
+      const descriptionMatch = existingBicingDebt.data.description.match(/x(\d+)/);
+      // Cálculo para el contador dentro de la descripción (si existía y no llega a 1)
+      let count = 1;
+      if (descriptionMatch) {
+        const currentCount = parseInt(descriptionMatch[1]);
+        count = currentCount > 1 ? currentCount - 1 : 1;
+      }
+      const newDescription = count > 1 ? `bicing x${count}` : `bicing`;
+
+      await debtsCollection.doc(existingBicingDebt.id).update({
+        amount: newAmount,
+        description: newDescription,
+      });
+    }
+  }
+});
