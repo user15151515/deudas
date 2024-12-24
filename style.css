@@ -3,9 +3,9 @@
 ============================ */
 :root {
     --rosaclaro: #ffefef;
-    --rosaoscuro: #ff4081 ;
+    --rosaoscuro: #ff4081;
     --rosaoscurohover: #ff3075;
-  }
+}
 
 body {
     font-family: 'Roboto', Arial, sans-serif;
@@ -21,7 +21,6 @@ body {
     padding: 20px;
     background: var(--rosaclaro);
     margin-top: 70px; /* Espacio suficiente para compensar la altura de la barra */
-
 }
 
 h1 {
@@ -43,17 +42,12 @@ h1 {
 
 .form-container button, .form-container input {
     flex: 1 1 calc(50% - 10px);
-    /* ... resto de estilos ... */
     padding: 10px;
     font-size: 1em;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-sizing: border-box;
 }
-
-
-
-
 
 /* ============================
    Tabla
@@ -77,11 +71,9 @@ tr {
     height: 50px; /* Altura mínima de las filas */
 }
 
-
 tr.not-paid td {
     background-color: #ffe5e6;
     color: #b71c1c;
-    z-index: inherit;
 }
 
 tr.completed td {
@@ -90,16 +82,12 @@ tr.completed td {
     text-decoration: line-through;
 }
 
-/*Estilo general del boton de marcar*/
-
 /* Para centrar la casilla dentro de la columna "Estado" */
 td:nth-child(5) {
     text-align: left !important; /* Fuerza a alinearse a la izquierda */
+}
 
-  }
-  
-  /* Contenedor general del checkbox (label + input + span) */
-  .check-container {
+.check-container {
     display: inline-flex;     /* Para alinear internamente */
     align-items: center;
     justify-content: center;
@@ -109,19 +97,17 @@ td:nth-child(5) {
     cursor: pointer;
     user-select: none;        /* Evita que se seleccione el texto al hacer clic */
     margin: 0 auto;           /* Para asegurar centrado dentro de la celda */
-  }
-  
-  /* Ocultamos el checkbox real (nativo) */
-  .check-container input {
+}
+
+.check-container input {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
     cursor: pointer;
-  }
-  
-  /* El “checkmark”: la cajita visible */
-  .checkmark {
+}
+
+.checkmark {
     position: absolute;
     top: 0;
     left: 0;
@@ -132,10 +118,9 @@ td:nth-child(5) {
     border-radius: 4px;          /* O 0 si prefieres esquinas cuadradas */
     box-sizing: border-box;      /* Asegura que el borde no desplace el contenido */
     transition: background-color 0.3s, border-color 0.3s;
-  }
-  
-  /* El tick (con un pseudo-elemento) */
-  .checkmark:after {
+}
+
+.checkmark:after {
     content: "";
     position: absolute;
     display: none;  
@@ -146,28 +131,24 @@ td:nth-child(5) {
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(45deg);
-  }
-  
-  /* Al marcar la casilla, se rellena de rosa y aparece el tick */
-  .check-container input:checked ~ .checkmark {
+}
+
+.check-container input:checked ~ .checkmark {
     background-color: var(--rosaoscuro);
     border-color: var(--rosaoscuro);
-  }
-  .check-container input:checked ~ .checkmark:after {
+}
+
+.check-container input:checked ~ .checkmark:after {
     display: block;
-  }
-  
-  
+}
+
 /* ============================
    Resumen
 ============================ */
 
 .delete-all-button {
-
     margin-bottom: 5px;
 }
-
-
 
 /* ============================
    Botón Mostrar deudas archivadas
@@ -185,16 +166,11 @@ td:nth-child(5) {
     transition: transform 0.3s;
     font-weight: 600; /* Negrita pero no tanto */
     font-size: medium;
-
 }
-
-
 
 #show-archived:hover {
     transform: scale(1.01); /* Ampliar un poco el botón */
 }
-
-/* estilo de la papelera */
 
 button.archive-button {
     margin-left: 2px; /* Espaciado menor a la izquierda */
@@ -213,7 +189,6 @@ button.archive-button svg {
     width: 20px; /* Tamaño del ícono */
     height: 20px;
     fill: var(--rosaoscuro); /* Asignarle tu color */
-
     transition: transform 0.2s ease, opacity 0.2s ease; /* Animación suave */
 }
 
@@ -226,7 +201,6 @@ button.archive-button:hover svg {
    menu
 ============================ */
 
-/* Menú fijo superior */
 /* Menú fijo superior */
 .main-menu {
     position: fixed;
@@ -256,7 +230,6 @@ button.archive-button:hover svg {
     cursor: pointer; /* Cambia el cursor al pasar el ratón */
     transition: transform 0.2s ease, opacity 0.2s ease; /* Animación suave */
     vertical-align: middle; /* Alineación vertical al texto */
-
 }
 
 .home-icon:hover {
@@ -273,15 +246,15 @@ button.archive-button:hover svg {
 
 .table {
     margin-top: 20px;
-  }
-  
+}
+
 /* Ocultar elementos por defecto */
 .hidden {
     display: none;
-  }
-  
-  /* Estilo general del wizard */
-  .wizard {
+}
+
+/* Estilo general del wizard */
+.wizard {
     position: fixed;
     top: 0;
     left: 0;
@@ -298,27 +271,25 @@ button.archive-button:hover svg {
     transition: opacity 0.5s ease-in-out; /* Transición al aparecer */
 }
 
-  
 .wizard.visible {
     opacity: 1;
     display: flex;
     pointer-events: auto; /* Permite la interacción cuando está visible */
 }
 
-  
-  /* Estilo de cada paso */
-  .step {
+/* Estilo de cada paso */
+.step {
     text-align: center;
     animation: fadeIn 0.5s ease-in-out;
-  }
-  
-  .step h2 {
+}
+
+.step h2 {
     font-size: 2em;
     margin-bottom: 20px;
     color: #ffffff;
-  }
-  
-  .step input {
+}
+
+.step input {
     font-size: 1.2em;
     padding: 10px;
     width: 80%;
@@ -328,9 +299,9 @@ button.archive-button:hover svg {
     margin-bottom: 20px;
     background: #333;
     color: white;
-  }
-  
-  .next-button, .primary-button {
+}
+
+.next-button, .primary-button {
     padding: 10px 20px;
     font-size: 1.2em;
     border: none;
@@ -340,51 +311,59 @@ button.archive-button:hover svg {
     cursor: pointer;
     margin-top: 10px;
     transition: transform 0.2s, background-color 0.3s;
-  }
-  
-  .next-button:hover, .primary-button:hover {
+}
+
+.next-button:hover, .primary-button:hover {
     transform: scale(1.05);
     background-color: #367c3a;
-  }
-  
-  .status-cell {
+}
+
+.status-cell {
     display: flex;
     align-items: center;       /* centra verticalmente */
     justify-content: space-between; /* separa izquierda y derecha */
     width: 100%;               /* ocupar toda la celda */
-  }
+}
 
-  .left-side {
-    /* No hace falta nada especial, si quieres lo dejas vacío */
+.left-side {
     display: flex;
     align-items: center;
-  }
-  
-  /* Contenedor derecho para archivar y lápiz */
-  .right-side {
+}
+
+.right-side {
     display: flex;
     align-items: center;
     gap: 6px;   /* espaciado entre iconos */
-  }
-  
+}
 
-  #start-add-debt {
+/* Botón "Añadir Deuda" con borde rosa oscuro y fondo transparente */
+#start-add-debt {
     display: block;
-    margin: 0 auto 20px auto; /* Centrar con margen superior/inferior */
-    width: 100%; /* Ocupa todo el ancho disponible */
-    padding: 15px;
-    font-size: 1.2em;
+    margin: 0;
+    width: auto;
+    padding: 10px 20px;
+    font-size: 1em;
     font-weight: bold;
-    background-color: var(--rosaoscuro);; /* Color principal */
-    color: white;
-    border: none;
-    border-radius: 8px;
+    background-color: transparent; /* Fondo transparente */
+    color: var(--rosaoscuro); /* Texto rosa oscuro */
+    border: 2px solid var(--rosaoscuro); /* Borde rosa oscuro */
+    border-radius: 15px;
     cursor: pointer;
-    transition: transform 0.3s, background-color 0.3s;
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 #start-add-debt:hover {
-    transform: scale(1.01); /* Ampliar un poco el botón */
+    transform: scale(1.05);
+    background-color: var(--rosaoscuro); /* Fondo rosa oscuro al hover */
+    color: #fff; /* Texto blanco al hover */
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaciado entre los botones */
+    margin-bottom: 20px; /* Espaciado con respecto a la tabla */
 }
 
 /* Estilo para el botón de cerrar */
@@ -399,38 +378,37 @@ button.archive-button:hover svg {
     cursor: pointer;
     z-index: 100;
     transition: transform 0.3s, color 0.3s;
-  }
-  
-  .close-wizard:hover {
+}
+
+.close-wizard:hover {
     color: #ff6666;
     transform: scale(1.2);
-  }
-  
+}
 
-  /* Animaciones */
-  @keyframes fadeIn {
+/* Animaciones */
+@keyframes fadeIn {
     from {
-      opacity: 0;
-      transform: translateY(20px);
+        opacity: 0;
+        transform: translateY(20px);
     }
     to {
-      opacity: 1;
-      transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
     }
-  }
-  
-  @keyframes fadeOut {
+}
+
+@keyframes fadeOut {
     from {
-      opacity: 1;
-      transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
     }
     to {
-      opacity: 0;
-      transform: translateY(20px);
+        opacity: 0;
+        transform: translateY(20px);
     }
-  }
+}
 
-  button.edit-button {
+button.edit-button {
     background: none;
     border: none;
     padding: 0;
@@ -438,8 +416,6 @@ button.archive-button:hover svg {
     margin-top: 5px;
     scale: 95%;
     fill: var(--rosaoscuro); /* Asignarle tu color */
-    
-
 }
 
 .edit-button svg {
@@ -447,15 +423,13 @@ button.archive-button:hover svg {
     height: 18px;
     fill: var(--rosaoscuro);  /* El color rosa oscuro */
     transition: transform 0.2s ease, fill 0.2s ease;
-  }
-
+}
 
 button.edit-button:hover img {
     transform: scale(1.2);
     opacity: 0.8;
 }
 
-/* Estilo para celdas editables */
 /* Estilo para celdas editables */
 .editable {
     cursor: pointer;
@@ -473,8 +447,6 @@ button.edit-button:hover img {
     background-color: transparent; /* Fondo transparente para que se vea el color de la fila */
     transition: background-color 0.3s ease, border-color 0.3s ease;
     box-sizing: content-box; /* Necesario para que width se ajuste al texto */
-
-
 }
 
 /* Resaltar fila editable al pasar el ratón */
@@ -491,20 +463,15 @@ td.editable-cell {
     background-color: inherit; /* Mantener el fondo de la fila */
 }
 
-
-
 .archived-debts {
     display: grid !important; /* Forzar el grid */
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important; /* Usar auto-fill */
     gap: 0.5rem !important; /* Reduce el espacio entre tarjetas */
     width: 100% !important;
-    /* Elimina el max-width si es innecesario */
     margin: 0 auto;
     align-items: center;
-    justify-items: center
+    justify-items: center;
 }
-
-
 
 .archived-card {
     background: linear-gradient(135deg, #ffffff, #f1f1f5);
@@ -517,9 +484,8 @@ td.editable-cell {
     transform: none; /* Asegurarse de que no haya escala aplicada */
 }
 
-
 .archived-card:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -539,6 +505,7 @@ td.editable-cell {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
+    gap: 5px;
 }
 
 .archived-actions button {
@@ -549,180 +516,50 @@ td.editable-cell {
     padding: 8px 12px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: 100%;
 }
 
 .archived-actions button:hover {
     background-color: #818b93;
 }
 
-
-
-
-
-
-/* ============================
-   Estilos Responsivos
-============================ */
-@media (max-width: 550px) {
-    /* Contenedor */
-    .container {
-        padding: 15px;
-    }
-
-    /* Título */
-    h1 {
-        font-size: 1.5em;
-    }
-
-    /* Formulario */
-    .form-container {
-        flex-direction: column; /* Elementos en columna */
-        gap: 10px; /* Espaciado reducido */
-    }
-
-    input, button {
-        flex: 1 1 100%; /* Ocupan todo el ancho */
-        font-size: 0.9em; /* Tamaño más pequeño */
-    }
-
-    /* Botón Bicing */
-    .bicing-button {
-        width: 100%; /* Ocupar todo el ancho */
-        font-size: 0.8em;
-        padding: 6px 10px; /* Reducir espacio interno */
-    }
-
-    /* Tabla */
-    table {
-        font-size: 0.85em; /* Reducir tamaño de fuente */
-        display: block; /* Hacer la tabla desplazable */
-        overflow-x: auto; /* Permitir desplazamiento horizontal */
-        white-space: nowrap; /* Evitar que el contenido se corte */
-        align-self: center;
-    }
-
-
-
-
-    /* Resumen */
-    #summary {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 10px; /* Espaciado entre elementos */
-    }
-
-    .archived-debts {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important; /* Hacer las tarjetas más pequeñas */
-        gap: 0.25rem !important; /* Reducir el espacio entre las tarjetas */
-    }
-
-    .archived-card {
-        width: 150px !important; /* Reducir el ancho de las tarjetas */
-        padding: 8px !important; /* Reducir padding para hacerlas más compactas */
-    }
-
-
-
-    /* Botón Mostrar deudas archivadas */
-    #show-archived {
-        max-width: 90%; /* Botón más ancho */
-        padding: 9px;
-        font-size: 0.8em;
-    }
-
-    .form-container {
-        gap: 8px; /* Reducir espacio entre elementos */
-    }
-
-    input, button {
-        font-size: 0.8em; /* Tamaño más pequeño */
-        padding: 6px 8px; /* Reducir padding */
-    }
-
-    #add-button {
-        flex: none; /* Evitar que ocupe todo el ancho */
-        width: 100%; /* Ajustarlo al ancho disponible */
-    }
-
-        /* Menú fijo superior */
-        .main-menu {
-            flex-direction: row; /* Mantén los elementos en fila */
-            padding: 5px 10px; /* Reduce el padding */
-        }
-    
-        /* Contenedor para casa y resumen */
-        .menu-content {
-            flex-direction: row; /* Asegura que sigan en fila */
-            align-items: center; /* Centra verticalmente los elementos */
-            gap: 5px; /* Espacio reducido entre icono y resumen */
-            flex-wrap: nowrap; /* Evita que se rompan en líneas diferentes */
-        }
-    
-        /* Icono de casa */
-        .home-icon {
-            width: 24px; /* Tamaño más pequeño para ajustarse */
-            height: 24px;
-        }
-    
-        /* Texto del resumen */
-        .summary-text {
-            font-size: 1em; /* Reducir tamaño del texto */
-            white-space: nowrap; /* Evita que el texto salte de línea */
-            overflow: hidden; /* Recorta si es demasiado largo */
-            text-overflow: ellipsis; /* Añade puntos suspensivos si es necesario */
-        }
-
-        #start-add-debt {
-            padding: 6px;
-            font-size: 0.8em;
-        }
-
-        .bicing-container {
-            scale: 75%;
-            margin-left: 0px;
-        }
-
+thead th {
+    background-color: var(--rosaoscuro); /* #ff4081 */
+    color: #fff;
+    padding: 12px 15px;
+    font-weight: bold;
 }
-
-
-
-
-
-
-
-
 
 /* ======= BICING CONTAINER (COMPACTO) ======= */
 .bicing-container {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background-color: #FFEBEB;
-    border: 1.6px solid var(--rosaoscuro);
+    background-color: transparent; /* Fondo transparente */
+    border: 2px solid var(--rosaoscuro);
     border-radius: 15px;       /* Forma de píldora */
     padding: 5px 12px;         /* Más pequeño */
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    max-width: 250px;          /* Ancho más estrecho */
-    margin: 10px auto;         /* Separación top/bottom más sutil */
-  }
-  
-  .bicing-label {
+    max-width: 250px;          /* Ancho más estrecho */ 
+    margin: 0;
+    width: auto;
+}
+
+.bicing-label {
     font-size: 1rem;
     font-weight: bold;
     color: var(--rosaoscuro);
     margin-right: 5px;
-  }
-  
-  /* Contenedor de los dos botones + y - */
-  .bicing-buttons {
+}
+
+/* Contenedor de los dos botones + y - */
+.bicing-buttons {
     display: flex;
     gap: 8px;
-  }
-  
-  /* ======= BOTONES BICING (+ y –) COMPACTOS ======= */
-  .bicing-button {
-    /* Otras propiedades que ya tienes */
+}
+
+/* ======= BOTON  ES BICING (+ y –) COMPACTOS ======= */
+.bicing-button {
     display: inline-flex;       /* O flex, si prefieres ocupar todo el ancho */
     align-items: center;        /* Centra verticalmente */
     justify-content: center;    /* Centra horizontalmente */
@@ -734,13 +571,195 @@ td.editable-cell {
     color: #fff;
     border: none;
     cursor: pointer;
-    /* ... etc */
-  }
-  
-  .bicing-button:hover {
+}
 
+.bicing-button:hover {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  }
-  
+}
+
+
+/* ============================
+    Estilos Responsivos
+============================ */
+@media (max-width: 550px) {
+     /* Contenedor */
+     .container {
+          padding: 15px;
+     }
+
+     /* Título */
+     h1 {
+          font-size: 1.5em;
+     }
+
+     /* Formulario */
+     .form-container {
+          flex-direction: column; /* Elementos en columna */
+          gap: 10px; /* Espaciado reducido */
+     }
+
+     input, button {
+          flex: 1 1 100%; /* Ocupan todo el ancho */
+          font-size: 0.9em; /* Tamaño más pequeño */
+     }
+
+     /* Tabla */
+     table {
+          font-size: 0.85em; /* Reducir tamaño de fuente */
+          display: block; /* Hacer la tabla desplazable */
+          overflow-x: auto; /* Permitir desplazamiento horizontal */
+          white-space: nowrap; /* Evitar que el contenido se corte */
+          align-self: center;
+     }
+
+     /* Resumen */
+     #summary {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 10px; /* Espaciado entre elementos */
+     }
+
+     .archived-debts {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important; /* Hacer las tarjetas más pequeñas */
+          gap: 0.25rem !important; /* Reducir el espacio entre las tarjetas */
+     }
+
+     .archived-card {
+          width: 150px !important; /* Reducir el ancho de las tarjetas */
+          padding: 8px !important; /* Reducir padding para hacerlas más compactas */
+     }
+
+     /* Botón Mostrar deudas archivadas */
+     #show-archived {
+          max-width: 90%; /* Botón más ancho */
+          padding: 9px;
+          font-size: 0.8em;
+     }
+
+     .form-container {
+          gap: 8px; /* Reducir espacio entre elementos */
+     }
+
+     input, button {
+          font-size: 0.8em; /* Tamaño más pequeño */
+          padding: 6px 8px; /* Reducir padding */
+     }
+
+     #add-button {
+          flex: none; /* Evitar que ocupe todo el ancho */
+          width: 100%; /* Ajustarlo al ancho disponible */
+     }
+
+     /* Menú fijo superior */
+     .main-menu {
+          flex-direction: row; /* Mantén los elementos en fila */
+          padding: 5px 10px; /* Reduce el padding */
+     }
+
+     /* Contenedor para casa y resumen */
+     .menu-content {
+          flex-direction: row; /* Asegura que sigan en fila */
+          align-items: center; /* Centra verticalmente los elementos */
+          gap: 5px; /* Espacio reducido entre icono y resumen */
+          flex-wrap: nowrap; /* Evita que se rompan en líneas diferentes */
+     }
+
+     /* Icono de casa */
+     .home-icon {
+          width: 24px; /* Tamaño más pequeño para ajustarse */
+          height: 24px;
+     }
+
+     /* Texto del resumen */
+     .summary-text {
+          font-size: 1em; /* Reducir tamaño del texto */
+          white-space: nowrap; /* Evita que el texto salte de línea */
+          overflow: hidden; /* Recorta si es demasiado largo */
+          text-overflow: ellipsis; /* Añade puntos suspensivos si es necesario */
+     }
+
+     .button-container {
+          display: flex;
+          flex-direction: row; /* Mantén los elementos en fila */
+          gap: 10px; /* Espaciado entre los botones */
+          justify-content: space-between; /* Asegura una distribución uniforme */
+          width: 100%; /* Ocupa todo el ancho del contenedor */
+     }
+
+     /* Estilo para los botones de acciones en móviles */
+     .archived-actions .delete-button,
+     .archived-actions .unarchive-button {
+          display: inline-flex; /* Asegura que el botón sea un contenedor flexible */
+          align-items: center;
+          justify-content: center;
+          padding: 0; /* Quita el padding interno */
+          background-color: transparent; /* Usa tu color personalizado */
+          color: white; /* Íconos visibles en fondo oscuro */
+          cursor: pointer;
+          text-indent: -9999px; /* Oculta el texto */
+          overflow: hidden; /* Previene desbordamientos */
+     }
+
+     /* Reemplazar contenido con íconos */
+     .archived-actions .delete-button::before {
+          content: '';
+          display: inline-block;
+          width: 25px;
+          height: 25px;
+          background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"></path></svg>') no-repeat center;
+          background-size: contain;
+          gap: 0px;
+     }
+
+     .archived-actions .unarchive-button::before {
+          content: '';
+          display: inline-block;
+          width: 25px;
+          height: 25px;
+          background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.54 5.23L19.15 3.9A2 2 0 0 0 17.8 3.34H6.15A2 2 0 0 0 4.8 3.9L3.46 5.23A1.99 1.99 0 0 0 3 6.75V19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.75c0-.53-.21-1.04-.59-1.42zm-1 13.77H4.99V8h14.05v11zM12 16c.55 0 1-.45 1-1v-3h2l-3-3-3 3h2v3c0 .55.45 1 1 1z"></path></svg>') no-repeat center;
+          background-size: contain;
+     }
+
+     #start-add-debt {
+          font-size: 0.9em; /* Fuente más pequeña */
+          padding: 5px 10px; /* Menos padding */
+          border-width: 1px; /* Borde más delgado */
+     }
+
+     .bicing-container {
+          padding: 4px 10px; /* Padding más compacto */
+          gap: 5px; /* Espaciado reducido */
+          border-width: 1px; /* Borde más delgado */
+     }
+
+     .bicing-buttons {
+          gap: 5px; /* Menor espacio entre los botones */
+     }
+
+     .bicing-button {
+          width: 20px; /* Tamaño más pequeño */
+          height: 20px;
+          background-color: var(--rosaoscuro);
+     }
+
+     .bicing-label {
+          font-weight: bold;
+          font-size: 0.9rem; /* Tamaño ajustado del texto */
+     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   

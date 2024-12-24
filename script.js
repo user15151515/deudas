@@ -3,7 +3,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyCD5M-oEEfMDzBIajdFHVSVx--2FGbGzHs",
     authDomain: "deudas-22173.firebaseapp.com",
     projectId: "deudas-22173",
-    storageBucket: "deudas-22173.firebasestorage.app",
+    storageBucket: "deudas-22173.appspot.com",
     messagingSenderId: "729150614399",
     appId: "1:729150614399:web:ea535c6403f2b33183884a",
     measurementId: "G-3XMKX8XSM5"
@@ -24,6 +24,9 @@ const firebaseConfig = {
   
   // Variables para totales por persona
   let totalsByPerson = { elia: 0, jana: 0 };
+  // Variable para guardar la suscripción a las archivadas:
+let unsubscribeArchived = null;
+
   
   // Función para normalizar nombres
   function normalizeName(name) {
@@ -527,54 +530,94 @@ function addArchiveButton(row, docId) {
 document.getElementById("show-archived").addEventListener("click", async () => {
     const archivedDebtsContainer = document.getElementById("archived-debts");
     if (archivedDebtsContainer.style.display === "none") {
+        // ---------- Al "abrir" ----------
         archivedDebtsContainer.style.display = "block";
         archivedDebtsContainer.innerHTML = ""; // Limpiar contenido previo
 
-        const archivedSnapshot = await db.collection("debts").where("archived", "==", true).get();
-        if (!archivedSnapshot.empty) {
-            archivedSnapshot.forEach((doc) => {
-                const debt = doc.data();
-                const card = document.createElement("div");
-                card.classList.add("archived-card");
-                card.innerHTML = `
-                    <h4>${debt.person}</h4>
-                    <p>${debt.amount.toFixed(2)} €</p>
-                    <p>${debt.description}</p>
-                    <p>${debt.date}</p>
-                    <div class="archived-actions">
-                        <button class="delete-button" data-id="${doc.id}">Eliminar</button>
-                    </div>
-                `;
-                archivedDebtsContainer.appendChild(card);
-                
-            });
+        // Suscribirse en tiempo real a las archivadas
+        unsubscribeArchived = db.collection("debts")
+            .where("archived", "==", true)
+            .onSnapshot((snapshot) => {
+                // Cada vez que cambie algo en las archivadas...
+                archivedDebtsContainer.innerHTML = ""; // Limpia de nuevo
 
-            // Añadir funcionalidad para borrar deudas individuales
-            document.querySelectorAll(".delete-button").forEach((button) => {
-                button.addEventListener("click", async (event) => {
-                    try {
-                        const debtId = event.currentTarget.dataset.id; // ID de la deuda
-                        const card = event.currentTarget.closest(".archived-card"); // Tarjeta a eliminar
-                        if (!card) throw new Error("No se encontró la tarjeta para eliminar.");
-            
-                        // Eliminar la deuda en Firestore
-                        await db.collection("debts").doc(debtId).delete();
-            
-                        // Eliminar la tarjeta del DOM
-                        card.remove();
-                    } catch (error) {
-                        console.error("Error al eliminar la deuda archivada:", error);
-                    }
+                if (snapshot.empty) {
+                    archivedDebtsContainer.innerHTML = "<p>No hay deudas archivadas.</p>";
+                    return;
+                }
+
+                snapshot.forEach((doc) => {
+                    const debt = doc.data();
+                    const card = document.createElement("div");
+                    card.classList.add("archived-card");
+                    card.innerHTML = `
+                        <h4>${debt.person}</h4>
+                        <p>${debt.amount.toFixed(2)} €</p>
+                        <p>${debt.description}</p>
+                        <p>${debt.date}</p>
+                        <div class="archived-actions">
+                            <button class="delete-button" data-id="${doc.id}">Eliminar</button>
+                            <button class="unarchive-button" data-id="${doc.id}">Desarchivar</button>
+
+                        </div>
+                    `;
+                    archivedDebtsContainer.appendChild(card);
                 });
+
+                // Añadir funcionalidad para borrar deudas individuales
+                document.querySelectorAll(".delete-button").forEach((button) => {
+                    
+                    
+                    button.addEventListener("click", async (event) => {
+                        try {
+                            const debtId = event.currentTarget.dataset.id;
+                            const card = event.currentTarget.closest(".archived-card");
+                            if (!card) throw new Error("No se encontró la tarjeta para eliminar.");
+        
+                            // Eliminar la deuda en Firestore
+                            await db.collection("debts").doc(debtId).delete();
+        
+                            // Eliminar la tarjeta del DOM
+                            card.remove();
+                        } catch (error) {
+                            console.error("Error al eliminar la deuda archivada:", error);
+                        }
+                    });
+                });
+
+                // === NUEVO: Añadir funcionalidad para "desarchivar" ===
+document.querySelectorAll(".unarchive-button").forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      try {
+        const debtId = event.currentTarget.dataset.id;
+        const card = event.currentTarget.closest(".archived-card");
+        if (!card) throw new Error("No se encontró la tarjeta para desarchivar.");
+  
+        // Actualizamos archived a false
+        await db.collection("debts").doc(debtId).update({ archived: false });
+        
+        // Quitamos la tarjeta del DOM
+        card.remove();
+      } catch (error) {
+        console.error("Error al desarchivar la deuda:", error);
+      }
+    });
+  });
+
             });
-            
-        } else {
-            archivedDebtsContainer.innerHTML = "<p>No hay deudas archivadas.</p>";
-        }
     } else {
+        // ---------- Al "cerrar" ----------
         archivedDebtsContainer.style.display = "none";
+        archivedDebtsContainer.innerHTML = ""; // Ocultarlo
+
+        // Cancelar la suscripción en tiempo real para no seguir recibiendo eventos
+        if (unsubscribeArchived) {
+            unsubscribeArchived(); 
+            unsubscribeArchived = null; 
+        }
     }
 });
+
 
             
 
@@ -588,56 +631,14 @@ function normalizeName(name) {
         .replace(/[\u0300-\u036f]/g, ""); // Elimina acentos
 }
 
-// Botón para añadir deuda de bicicleta
-const bicingButton = document.getElementById("add-bicing-button");
-bicingButton.addEventListener("click", async () => {
-    let existingBicingDebt = null;
-
-    // Cargar todas las deudas no archivadas y buscar la deuda de "bicing" para Jana
-    const snapshot = await debtsCollection.where("archived", "==", false).get();
-    snapshot.forEach((doc) => {
-        const debt = doc.data();
-        if (
-            normalizeName(debt.person) === "jana" &&
-            debt.description.startsWith("bicing")
-        ) {
-            existingBicingDebt = { id: doc.id, data: debt };
-        }
-    });
-
-    if (existingBicingDebt) {
-        // Si ya existe una deuda de "bicing", actualizarla
-        const newAmount = existingBicingDebt.data.amount + 0.35;
-        const descriptionMatch = existingBicingDebt.data.description.match(/x(\d+)/);
-        const count = descriptionMatch ? parseInt(descriptionMatch[1]) + 1 : 2;
-        const newDescription = `bicing x${count}`;
-
-        await debtsCollection.doc(existingBicingDebt.id).update({
-            amount: newAmount,
-            description: newDescription,
-        });
-    } else {
-        // Si no existe ninguna deuda de "bicing", crear una nueva
-        await debtsCollection.add({
-            date: new Date().toLocaleDateString(),
-            person: "Jana", // Guardar el nombre original
-            amount: 0.35,
-            description: "bicing",
-            status: "not-paid",
-            archived: false, // Asegurarnos de que esta deuda no esté archivada
-        });
-    }
-});
-
-// Botones de Bicing
-const addBicingButton = document.getElementById("add-bicing-button");
-const subtractBicingButton = document.getElementById("subtract-bicing-button");
 
 // Evento para sumar Bicing (+)
+const addBicingButton = document.getElementById("add-bicing-button");
 addBicingButton.addEventListener("click", async () => {
   let existingBicingDebt = null;
-  const snapshot = await debtsCollection.where("archived", "==", false).get();
 
+  // Buscar si ya existe una deuda de Bicing para Jana
+  const snapshot = await debtsCollection.where("archived", "==", false).get();
   snapshot.forEach((doc) => {
     const debt = doc.data();
     if (
@@ -649,6 +650,7 @@ addBicingButton.addEventListener("click", async () => {
   });
 
   if (existingBicingDebt) {
+    // Si ya existe, actualiza la cantidad y descripción
     const newAmount = existingBicingDebt.data.amount + 0.35;
     const descriptionMatch = existingBicingDebt.data.description.match(/x(\d+)/);
     const count = descriptionMatch ? parseInt(descriptionMatch[1]) + 1 : 2;
@@ -659,6 +661,7 @@ addBicingButton.addEventListener("click", async () => {
       description: newDescription,
     });
   } else {
+    // Si no existe, crea una nueva deuda de Bicing
     await debtsCollection.add({
       date: new Date().toLocaleDateString(),
       person: "Jana",
@@ -670,6 +673,7 @@ addBicingButton.addEventListener("click", async () => {
   }
 });
 
+const subtractBicingButton = document.getElementById("subtract-bicing-button");
 // Evento para restar Bicing (-)
 subtractBicingButton.addEventListener("click", async () => {
   let existingBicingDebt = null;
