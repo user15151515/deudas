@@ -175,7 +175,7 @@ td:nth-child(5) {
 #show-archived {
     display: block;
     margin: 15px auto;
-    padding: 10px 20px;
+    padding: 15px 20px;
     background-color: var(--rosaoscuro);
     color: white;
     border: none;
@@ -184,6 +184,7 @@ td:nth-child(5) {
     max-width: 300px;
     transition: transform 0.3s;
     font-weight: 600; /* Negrita pero no tanto */
+    font-size: medium;
 
 }
 
