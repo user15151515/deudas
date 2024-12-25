@@ -697,7 +697,9 @@ thead th {
           background-color: transparent; /* Usa tu color personalizado */
           color: white; /* Íconos visibles en fondo oscuro */
           cursor: pointer;
-          text-indent: -9999px; /* Oculta el texto */
+          text-indent: -1000px; /* Oculta el texto */
+          white-space: nowrap; /* Evita que el texto salte de línea */
+          overflow: hidden; /* Previene desbordamientos */
           overflow: hidden; /* Previene desbordamientos */
      }
 

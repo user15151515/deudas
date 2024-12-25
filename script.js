@@ -245,13 +245,6 @@ addDebtButton.addEventListener("click", async () => {
     }, 500);
 });
 
-  
-  
-
-  
-
-
-
 // Llama a updatePaymentSummary cada vez que se actualicen los totales
 function updateTotals() {
     const eliaTotal = totalsByPerson.elia.toFixed(2);
