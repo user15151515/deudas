@@ -585,6 +585,7 @@ thead th {
      /* Contenedor */
      .container {
           padding: 15px;
+          align-items: center;
      }
 
      /* Título */
@@ -605,7 +606,7 @@ thead th {
 
      /* Tabla */
      table {
-          font-size: 0.85em; /* Reducir tamaño de fuente */
+          font-size: 1em; /* Reducir tamaño de fuente */
           display: block; /* Hacer la tabla desplazable */
           overflow-x: auto; /* Permitir desplazamiento horizontal */
           white-space: nowrap; /* Evitar que el contenido se corte */
@@ -618,16 +619,6 @@ thead th {
           align-items: center;
           text-align: center;
           gap: 10px; /* Espaciado entre elementos */
-     }
-
-     .archived-debts {
-          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important; /* Hacer las tarjetas más pequeñas */
-          gap: 0.25rem !important; /* Reducir el espacio entre las tarjetas */
-     }
-
-     .archived-card {
-          width: 150px !important; /* Reducir el ancho de las tarjetas */
-          padding: 8px !important; /* Reducir padding para hacerlas más compactas */
      }
 
      /* Botón Mostrar deudas archivadas */
@@ -687,42 +678,6 @@ thead th {
           width: 100%; /* Ocupa todo el ancho del contenedor */
      }
 
-     /* Estilo para los botones de acciones en móviles */
-     .archived-actions .delete-button,
-     .archived-actions .unarchive-button {
-          display: inline-flex; /* Asegura que el botón sea un contenedor flexible */
-          align-items: center;
-          justify-content: center;
-          padding: 0; /* Quita el padding interno */
-          background-color: transparent; /* Usa tu color personalizado */
-          color: white; /* Íconos visibles en fondo oscuro */
-          cursor: pointer;
-          text-indent: -1000px; /* Oculta el texto */
-          white-space: nowrap; /* Evita que el texto salte de línea */
-          overflow: hidden; /* Previene desbordamientos */
-          overflow: hidden; /* Previene desbordamientos */
-     }
-
-     /* Reemplazar contenido con íconos */
-     .archived-actions .delete-button::before {
-          content: '';
-          display: inline-block;
-          width: 25px;
-          height: 25px;
-          background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"></path></svg>') no-repeat center;
-          background-size: contain;
-          gap: 0px;
-     }
-
-     .archived-actions .unarchive-button::before {
-          content: '';
-          display: inline-block;
-          width: 25px;
-          height: 25px;
-          background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.54 5.23L19.15 3.9A2 2 0 0 0 17.8 3.34H6.15A2 2 0 0 0 4.8 3.9L3.46 5.23A1.99 1.99 0 0 0 3 6.75V19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.75c0-.53-.21-1.04-.59-1.42zm-1 13.77H4.99V8h14.05v11zM12 16c.55 0 1-.45 1-1v-3h2l-3-3-3 3h2v3c0 .55.45 1 1 1z"></path></svg>') no-repeat center;
-          background-size: contain;
-     }
-
      #start-add-debt {
           font-size: 0.9em; /* Fuente más pequeña */
           padding: 5px 10px; /* Menos padding */
@@ -749,7 +704,24 @@ thead th {
           font-weight: bold;
           font-size: 0.9rem; /* Tamaño ajustado del texto */
      }
-}
+    tr {
+        height: 20px;
+    }
+
+    .archived-card {
+ width: 40%; /* Tamaño más pequeño para las tarjetas */
+        font-size: 0.75em;
+    }
+
+    th, td {
+        padding: 12px 15px;
+
+    }
+
+  
+    }
+
+
 
 
 
