@@ -1,6 +1,3 @@
-/* ============================
-   Estilos Generales
-============================ */
 :root {
     --rosaclaro: #ffefef;
     --rosaoscuro: #ff4081;
@@ -20,7 +17,7 @@ body {
     margin: 20px auto;
     padding: 20px;
     background: var(--rosaclaro);
-    margin-top: 70px; /* Espacio suficiente para compensar la altura de la barra */
+    margin-top: 70px;
 }
 
 h1 {
@@ -30,9 +27,6 @@ h1 {
     color: #333;
 }
 
-/* ============================
-   Formulario
-============================ */
 .form-container {
     display: flex;
     flex-wrap: wrap;
@@ -49,9 +43,6 @@ h1 {
     box-sizing: border-box;
 }
 
-/* ============================
-   Tabla
-============================ */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -64,11 +55,11 @@ th, td {
     border-bottom: 1px solid #eee;
     background-color: #FFEBEB;
     font-weight: bold;
-    vertical-align: middle; /* Asegura que el contenido esté centrado */
+    vertical-align: middle;
 }
 
 tr {
-    height: 50px; /* Altura mínima de las filas */
+    height: 50px;
 }
 
 tr.not-paid td {
@@ -82,21 +73,20 @@ tr.completed td {
     text-decoration: line-through;
 }
 
-/* Para centrar la casilla dentro de la columna "Estado" */
 td:nth-child(5) {
-    text-align: left !important; /* Fuerza a alinearse a la izquierda */
+    text-align: left !important;
 }
 
 .check-container {
-    display: inline-flex;     /* Para alinear internamente */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    position: relative;       /* Para posicionar la cajita y el tick */
-    width: 20px;              /* Ancho fijo */
-    height: 20px;             /* Alto fijo */
+    position: relative;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
-    user-select: none;        /* Evita que se seleccione el texto al hacer clic */
-    margin: 0 auto;           /* Para asegurar centrado dentro de la celda */
+    user-select: none;
+    margin: 0 auto;
 }
 
 .check-container input {
@@ -111,22 +101,22 @@ td:nth-child(5) {
     position: absolute;
     top: 0;
     left: 0;
-    width: 110%;                /* Ocupa todo el contenedor */
+    width: 110%;
     height: 100%;
-    background-color: #fff;      /* Fondo blanco */
+    background-color: #fff;
     border: 2px solid var(--rosaoscuro);
-    border-radius: 4px;          /* O 0 si prefieres esquinas cuadradas */
-    box-sizing: border-box;      /* Asegura que el borde no desplace el contenido */
+    border-radius: 4px;
+    box-sizing: border-box;
     transition: background-color 0.3s, border-color 0.3s;
 }
 
 .checkmark:after {
     content: "";
     position: absolute;
-    display: none;  
+    display: none;
     width: 5px;
     height: 10px;
-    border: solid #fff;         /* Color del tick */
+    border: solid #fff;
     border-width: 0 2px 2px 0;
     top: 40%;
     left: 50%;
@@ -142,17 +132,10 @@ td:nth-child(5) {
     display: block;
 }
 
-/* ============================
-   Resumen
-============================ */
-
 .delete-all-button {
     margin-bottom: 5px;
 }
 
-/* ============================
-   Botón Mostrar deudas archivadas
-============================ */
 #show-archived {
     display: block;
     margin: 15px auto;
@@ -164,96 +147,86 @@ td:nth-child(5) {
     cursor: pointer;
     max-width: 300px;
     transition: transform 0.3s;
-    font-weight: 600; /* Negrita pero no tanto */
+    font-weight: 600;
     font-size: medium;
 }
 
 #show-archived:hover {
-    transform: scale(1.01); /* Ampliar un poco el botón */
+    transform: scale(1.01);
 }
 
 button.archive-button {
-    margin-left: 2px; /* Espaciado menor a la izquierda */
-    background: none; /* Fondo transparente */
-    border: none; /* Sin bordes */
+    margin-left: 2px;
+    background: none;
+    border: none;
     padding: 0;
     margin: 0;
     display: inline-flex;
     align-items: center;
-    justify-content: center;    
+    justify-content: center;
     cursor: pointer;
     flex-direction: row-reverse;
 }
 
 button.archive-button svg {
-    width: 20px; /* Tamaño del ícono */
+    width: 20px;
     height: 20px;
-    fill: var(--rosaoscuro); /* Asignarle tu color */
-    transition: transform 0.2s ease, opacity 0.2s ease; /* Animación suave */
+    fill: var(--rosaoscuro);
+    transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 button.archive-button:hover svg {
-    transform: scale(1.2); /* Ampliar un poco al pasar el ratón */
-    opacity: 0.8; /* Hacerlo ligeramente transparente */
+    transform: scale(1.2);
+    opacity: 0.8;
 }
 
-/* ============================
-   menu
-============================ */
-
-/* Menú fijo superior */
 .main-menu {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #ff4081; /* Fondo claro */
+    background-color: #ff4081;
     display: flex;
-    align-items: center; /* Centra verticalmente los elementos */
-    justify-content: center; /* Centra horizontalmente los elementos */
+    align-items: center;
+    justify-content: center;
     padding: 10px 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 100;
 }
 
-/* Contenedor para casa y resumen */
 .menu-content {
     display: flex;
-    align-items: center; /* Centra verticalmente casa y resumen */
+    align-items: center;
 }
 
-/* Estilo del icono de casa */
 .home-icon {
-    width: 40px; /* Tamaño del ícono */
+    width: 40px;
     height: 40px;
-    margin-right: 10px; /* Espacio entre la casa y el resumen */
-    cursor: pointer; /* Cambia el cursor al pasar el ratón */
-    transition: transform 0.2s ease, opacity 0.2s ease; /* Animación suave */
-    vertical-align: middle; /* Alineación vertical al texto */
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    vertical-align: middle;
 }
 
 .home-icon:hover {
-    transform: scale(1.1); /* Ampliar un poco al pasar el ratón */
-    opacity: 0.8; /* Suavizar el color al hacer hover */
+    transform: scale(1.1);
+    opacity: 0.8;
 }
 
-/* Texto del resumen */
 .summary-text {
-    font-size: 1.5em; /* Texto más grande */
+    font-size: 1.5em;
     font-weight: bold;
-    color: white; /* Color del texto */
+    color: white;
 }
 
 .table {
     margin-top: 20px;
 }
 
-/* Ocultar elementos por defecto */
 .hidden {
     display: none;
 }
 
-/* Estilo general del wizard */
 .wizard {
     position: fixed;
     top: 0;
@@ -263,21 +236,20 @@ button.archive-button:hover svg {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.9); /* Fondo más oscuro */
+    background-color: rgba(0, 0, 0, 0.9);
     color: white;
     z-index: 10;
-    opacity: 0; /* Inicialmente oculto */
-    pointer-events: none; /* Evita que bloquee la interacción cuando está oculto */
-    transition: opacity 0.5s ease-in-out; /* Transición al aparecer */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
 }
 
 .wizard.visible {
     opacity: 1;
     display: flex;
-    pointer-events: auto; /* Permite la interacción cuando está visible */
+    pointer-events: auto;
 }
 
-/* Estilo de cada paso */
 .step {
     text-align: center;
     animation: fadeIn 0.5s ease-in-out;
@@ -306,13 +278,12 @@ button.archive-button:hover svg {
     font-size: 1.2em;
     border: none;
     border-radius: 5px;
-    background-color: #48914b;
+    background-color: var(--rosaoscuro);
     color: white;
     cursor: pointer;
     margin-top: 10px;
     transition: transform 0.2s, background-color 0.3s;
 }
-
 .next-button:hover, .primary-button:hover {
     transform: scale(1.05);
     background-color: #367c3a;
@@ -320,9 +291,9 @@ button.archive-button:hover svg {
 
 .status-cell {
     display: flex;
-    align-items: center;       /* centra verticalmente */
-    justify-content: space-between; /* separa izquierda y derecha */
-    width: 100%;               /* ocupar toda la celda */
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .left-side {
@@ -333,10 +304,9 @@ button.archive-button:hover svg {
 .right-side {
     display: flex;
     align-items: center;
-    gap: 6px;   /* espaciado entre iconos */
+    gap: 6px;
 }
 
-/* Botón "Añadir Deuda" con borde rosa oscuro y fondo transparente */
 #start-add-debt {
     display: block;
     margin: 0;
@@ -344,9 +314,9 @@ button.archive-button:hover svg {
     padding: 10px 20px;
     font-size: 1em;
     font-weight: bold;
-    background-color: transparent; /* Fondo transparente */
-    color: var(--rosaoscuro); /* Texto rosa oscuro */
-    border: 2px solid var(--rosaoscuro); /* Borde rosa oscuro */
+    background-color: transparent;
+    color: var(--rosaoscuro);
+    border: 2px solid var(--rosaoscuro);
     border-radius: 15px;
     cursor: pointer;
     transition: transform 0.3s, background-color 0.3s, color 0.3s;
@@ -355,18 +325,17 @@ button.archive-button:hover svg {
 
 #start-add-debt:hover {
     transform: scale(1.05);
-    background-color: var(--rosaoscuro); /* Fondo rosa oscuro al hover */
-    color: #fff; /* Texto blanco al hover */
+    background-color: var(--rosaoscuro);
+    color: #fff;
 }
 
 .button-container {
     display: flex;
     align-items: center;
-    gap: 15px; /* Espaciado entre los botones */
-    margin-bottom: 20px; /* Espaciado con respecto a la tabla */
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-/* Estilo para el botón de cerrar */
 .close-wizard {
     position: absolute;
     top: 30px;
@@ -385,7 +354,6 @@ button.archive-button:hover svg {
     transform: scale(1.2);
 }
 
-/* Animaciones */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -415,13 +383,13 @@ button.edit-button {
     cursor: pointer;
     margin-top: 5px;
     scale: 95%;
-    fill: var(--rosaoscuro); /* Asignarle tu color */
+    fill: var(--rosaoscuro);
 }
 
 .edit-button svg {
-    width: 18px;              /* Ajusta a tu gusto */
+    width: 18px;
     height: 18px;
-    fill: var(--rosaoscuro);  /* El color rosa oscuro */
+    fill: var(--rosaoscuro);
     transition: transform 0.2s ease, fill 0.2s ease;
 }
 
@@ -430,43 +398,39 @@ button.edit-button:hover img {
     opacity: 0.8;
 }
 
-/* Estilo para celdas editables */
 .editable {
     cursor: pointer;
 }
 
-/* Borde redondeado solo alrededor del contenido */
 .edit-input {
-    display: block; /* Asegurar que ocupe todo el ancho */
-    width: 100%; /* Ancho completo de la celda */
-    height: 100%; /* Altura completa de la celda */
-    padding: 4px; /* Espaciado interno */
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 4px;
     font-size: 1em;
-    border: 2px dashed black; /* Borde entrecortado negro */
-    border-radius: 8px; /* Bordes redondeados */
-    background-color: transparent; /* Fondo transparente para que se vea el color de la fila */
+    border: 2px dashed black;
+    border-radius: 8px;
+    background-color: transparent;
     transition: background-color 0.3s ease, border-color 0.3s ease;
-    box-sizing: content-box; /* Necesario para que width se ajuste al texto */
+    box-sizing: content-box;
 }
 
-/* Resaltar fila editable al pasar el ratón */
 .editable:hover {
-    background-color: #f0f0f0; /* Fondo más claro al pasar el ratón */
+    background-color: #f0f0f0;
 }
 
-/* Estilo de las celdas durante la edición */
 td.editable-cell {
-    padding: 0; /* Eliminar el padding de la celda */
-    margin: 0; /* Eliminar márgenes */
-    text-align: left; /* Alinear texto a la izquierda */
-    vertical-align: middle; /* Centrar verticalmente el contenido */
-    background-color: inherit; /* Mantener el fondo de la fila */
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    vertical-align: middle;
+    background-color: inherit;
 }
 
 .archived-debts {
-    display: grid !important; /* Forzar el grid */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important; /* Usar auto-fill */
-    gap: 0.5rem !important; /* Reduce el espacio entre tarjetas */
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+    gap: 0.5rem !important;
     width: 100% !important;
     margin: 0 auto;
     align-items: center;
@@ -477,11 +441,11 @@ td.editable-cell {
     background: linear-gradient(135deg, #ffffff, #f1f1f5);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    padding: 10px; /* Mantener el padding reducido */
-    width: 90%; /* Tamaño más pequeño para las tarjetas */
+    padding: 10px;
+    width: 90%;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     text-align: center;
-    transform: none; /* Asegurarse de que no haya escala aplicada */
+    transform: none;
 }
 
 .archived-card:hover {
@@ -524,23 +488,22 @@ td.editable-cell {
 }
 
 thead th {
-    background-color: var(--rosaoscuro); /* #ff4081 */
+    background-color: var(--rosaoscuro);
     color: #fff;
     padding: 12px 15px;
     font-weight: bold;
 }
 
-/* ======= BICING CONTAINER (COMPACTO) ======= */
 .bicing-container {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background-color: transparent; /* Fondo transparente */
+    background-color: transparent;
     border: 2px solid var(--rosaoscuro);
-    border-radius: 15px;       /* Forma de píldora */
-    padding: 5px 12px;         /* Más pequeño */
+    border-radius: 15px;
+    padding: 5px 12px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    max-width: 250px;          /* Ancho más estrecho */ 
+    max-width: 250px;
     margin: 0;
     width: auto;
 }
@@ -552,17 +515,15 @@ thead th {
     margin-right: 5px;
 }
 
-/* Contenedor de los dos botones + y - */
 .bicing-buttons {
     display: flex;
     gap: 8px;
 }
 
-/* ======= BOTON  ES BICING (+ y –) COMPACTOS ======= */
 .bicing-button {
-    display: inline-flex;       /* O flex, si prefieres ocupar todo el ancho */
-    align-items: center;        /* Centra verticalmente */
-    justify-content: center;    /* Centra horizontalmente */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-size: 1rem;
     width: 32px;
     height: 32px;
@@ -577,163 +538,124 @@ thead th {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-
-/* ============================
-    Estilos Responsivos
-============================ */
 @media (max-width: 550px) {
-     /* Contenedor */
-     .container {
-          padding: 15px;
-          align-items: center;
-     }
+    .container {
+        padding: 15px;
+        align-items: center;
+    }
 
-     /* Título */
-     h1 {
-          font-size: 1.5em;
-     }
+    h1 {
+        font-size: 1.5em;
+    }
 
-     /* Formulario */
-     .form-container {
-          flex-direction: column; /* Elementos en columna */
-          gap: 10px; /* Espaciado reducido */
-     }
+    .form-container {
+        flex-direction: column;
+        gap: 10px;
+    }
 
-     input, button {
-          flex: 1 1 100%; /* Ocupan todo el ancho */
-          font-size: 0.9em; /* Tamaño más pequeño */
-     }
+    input, button {
+        flex: 1 1 100%;
+        font-size: 0.9em;
+    }
 
-     /* Tabla */
-     table {
-          font-size: 1em; /* Reducir tamaño de fuente */
-          display: block; /* Hacer la tabla desplazable */
-          overflow-x: auto; /* Permitir desplazamiento horizontal */
-          white-space: nowrap; /* Evitar que el contenido se corte */
-          align-self: center;
-     }
+    table {
+        font-size: 1em;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        align-self: center;
+    }
 
-     /* Resumen */
-     #summary {
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          gap: 10px; /* Espaciado entre elementos */
-     }
+    #summary {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+    }
 
-     /* Botón Mostrar deudas archivadas */
-     #show-archived {
-          max-width: 90%; /* Botón más ancho */
-          padding: 9px;
-          font-size: 0.8em;
-     }
+    #show-archived {
+        max-width: 90%;
+        padding: 9px;
+        font-size: 0.8em;
+    }
 
-     .form-container {
-          gap: 8px; /* Reducir espacio entre elementos */
-     }
+    .form-container {
+        gap: 8px;
+    }
 
-     input, button {
-          font-size: 0.8em; /* Tamaño más pequeño */
-          padding: 6px 8px; /* Reducir padding */
-     }
+    input, button {
+        font-size: 0.8em;
+        padding: 6px 8px;
+    }
 
-     #add-button {
-          flex: none; /* Evitar que ocupe todo el ancho */
-          width: 100%; /* Ajustarlo al ancho disponible */
-     }
+    .main-menu {
+        flex-direction: row;
+        padding: 5px 10px;
+    }
 
-     /* Menú fijo superior */
-     .main-menu {
-          flex-direction: row; /* Mantén los elementos en fila */
-          padding: 5px 10px; /* Reduce el padding */
-     }
+    .menu-content {
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+        flex-wrap: nowrap;
+    }
 
-     /* Contenedor para casa y resumen */
-     .menu-content {
-          flex-direction: row; /* Asegura que sigan en fila */
-          align-items: center; /* Centra verticalmente los elementos */
-          gap: 5px; /* Espacio reducido entre icono y resumen */
-          flex-wrap: nowrap; /* Evita que se rompan en líneas diferentes */
-     }
+    .home-icon {
+        width: 24px;
+        height: 24px;
+    }
 
-     /* Icono de casa */
-     .home-icon {
-          width: 24px; /* Tamaño más pequeño para ajustarse */
-          height: 24px;
-     }
+    .summary-text {
+        font-size: 1em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-     /* Texto del resumen */
-     .summary-text {
-          font-size: 1em; /* Reducir tamaño del texto */
-          white-space: nowrap; /* Evita que el texto salte de línea */
-          overflow: hidden; /* Recorta si es demasiado largo */
-          text-overflow: ellipsis; /* Añade puntos suspensivos si es necesario */
-     }
+    .button-container {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        justify-content: space-between;
+        width: 100%;
+    }
 
-     .button-container {
-          display: flex;
-          flex-direction: row; /* Mantén los elementos en fila */
-          gap: 10px; /* Espaciado entre los botones */
-          justify-content: space-between; /* Asegura una distribución uniforme */
-          width: 100%; /* Ocupa todo el ancho del contenedor */
-     }
+    .bicing-buttons {
+        gap: 5px;
+    }
 
-     #start-add-debt {
-          font-size: 0.9em; /* Fuente más pequeña */
-          padding: 5px 10px; /* Menos padding */
-          border-width: 1px; /* Borde más delgado */
-     }
+    .bicing-label {
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
 
-     .bicing-container {
-          padding: 4px 10px; /* Padding más compacto */
-          gap: 5px; /* Espaciado reducido */
-          border-width: 1px; /* Borde más delgado */
-     }
-
-     .bicing-buttons {
-          gap: 5px; /* Menor espacio entre los botones */
-     }
-
-     .bicing-button {
-          width: 20px; /* Tamaño más pequeño */
-          height: 20px;
-          background-color: var(--rosaoscuro);
-     }
-
-     .bicing-label {
-          font-weight: bold;
-          font-size: 0.9rem; /* Tamaño ajustado del texto */
-     }
     tr {
         height: 20px;
     }
 
     .archived-card {
- width: 40%; /* Tamaño más pequeño para las tarjetas */
+        width: 40%;
         font-size: 0.75em;
     }
 
     th, td {
         padding: 12px 15px;
-
     }
 
-  
+    #bicing-container, #start-add-debt {
+        width: 100%;
+        max-width: 90%;
+        padding: 10.5px;
+        box-sizing: border-box;
     }
 
+    #bicing-container .bicing-buttons {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
+    #bicing-container .bicing-buttons button {
+        width: 48%;
+    }
+}

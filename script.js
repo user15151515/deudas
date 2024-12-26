@@ -134,12 +134,6 @@ statusCheckbox.addEventListener("change", async () => {
     updateTotals();
 });
 
-
-
-
-
-
-
   // Añadir una nueva deuda a Firestore
   const startAddDebt = document.getElementById("start-add-debt");
   const wizard = document.getElementById("wizard");
@@ -324,8 +318,6 @@ statusCheckbox.addEventListener("change", async () => {
     row.classList.toggle("not-paid", !statusCheckbox.checked);
 });
 
-
-
             // Aquí llamamos a `addArchiveButton`
         addArchiveButton(row, doc.id);
 
@@ -444,6 +436,14 @@ function addEditButton(row, docId) {
             { cell: row.cells[3], key: "description" },
         ];
 
+        const originalValues = editableCells.map(({ cell, key }) => ({
+            cell,
+            key,
+            originalValue: key === "amount"
+                ? parseFloat(cell.textContent) || 0
+                : cell.textContent.trim()
+        }));
+
         editableCells.forEach(({ cell, key }) => {
             const originalValue = key === "amount"
                 ? parseFloat(cell.textContent) || 0
@@ -471,15 +471,66 @@ function addEditButton(row, docId) {
                 } else {
                     cell.textContent = originalValue;
                 }
+                cleanup(); // Eliminar listeners globales
+            };
+
+            // Cancelar cambios al presionar Escape
+            const cancelChanges = () => {
+                cell.textContent = originalValue;
+                cleanup(); // Eliminar listeners globales
+            };
+
+            // Detectar teclas para guardar o cancelar
+            const handleKeyDown = (event) => {
+                if (event.key === "Escape") {
+                    cancelChanges(); // Cancelar al pulsar Escape
+                } else if (event.key === "Enter") {
+                    saveChanges(); // Guardar al pulsar Enter
+                }
+            };
+
+            // Limpiar listeners al finalizar edición
+            const cleanup = () => {
+                input.removeEventListener("blur", saveChanges);
+                input.removeEventListener("keydown", handleKeyDown);
             };
 
             input.addEventListener("blur", saveChanges);
-            input.addEventListener("keydown", (e) => {
-                if (e.key === "Enter") {
-                    input.blur(); // Forzar guardar al presionar Enter
-                }
-            });
+            input.addEventListener("keydown", handleKeyDown);
         });
+
+        // Detectar clic fuera del input o toque (móviles)
+        const handleOutsideClick = async (event) => {
+            if (!row.contains(event.target)) {
+                await Promise.all(editableCells.map(({ cell, key }) => {
+                    const input = cell.querySelector("input");
+                    const newValue = key === "amount"
+                        ? parseFloat(input.value) || 0
+                        : input.value.trim();
+
+                    if (newValue !== originalValues.find(v => v.key === key).originalValue) {
+                        const updateData = {};
+                        updateData[key] = newValue;
+                        return db.collection("debts").doc(docId).update(updateData).then(() => {
+                            cell.textContent = key === "amount" ? `${newValue.toFixed(2)} €` : newValue;
+                        });
+                    } else {
+                        cell.textContent = originalValues.find(v => v.key === key).originalValue;
+                    }
+                }));
+                cleanup(); // Eliminar listeners globales
+            }
+        };
+
+        // Limpiar listeners al finalizar edición
+        const cleanup = () => {
+            document.removeEventListener("click", handleOutsideClick);
+            document.removeEventListener("touchstart", handleOutsideClick);
+        };
+
+        // Agregar listeners globales
+        document.addEventListener("click", handleOutsideClick);
+        document.addEventListener("touchstart", handleOutsideClick);
     });
 
     const lastCell = row.lastElementChild;
@@ -517,8 +568,6 @@ function addArchiveButton(row, docId) {
         description: row.cells[3].textContent
     });
 }
-
-
 
 document.getElementById("show-archived").addEventListener("click", async () => {
     const archivedDebtsContainer = document.getElementById("archived-debts");
@@ -611,11 +660,6 @@ document.querySelectorAll(".unarchive-button").forEach((button) => {
     }
 });
 
-
-            
-
-
-
 // Función para normalizar nombres (sin tildes ni mayúsculas)
 function normalizeName(name) {
     return name
@@ -623,7 +667,6 @@ function normalizeName(name) {
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, ""); // Elimina acentos
 }
-
 
 // Evento para sumar Bicing (+)
 const addBicingButton = document.getElementById("add-bicing-button");
