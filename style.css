@@ -120,6 +120,7 @@ td:nth-child(5) {
     cursor: pointer;
     transition: transform 0.3s, background-color 0.3s, color 0.3s;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
 }
 
 .boton-inferior:hover {
@@ -464,8 +465,7 @@ button.edit-button {
     background: #ffffff;
     border-radius: 6px;
     padding: 10px;
-    margin-top: 8px;
-    margin-bottom: 0px;
+    margin: 8px 8px 0px 0px;
     border: 1px solid #ddd;
     gap: 10px;
   }
@@ -614,10 +614,12 @@ thead th {
       }
     
 
-    #mark-all-paid, #archive-all-debts, #show-archived {
+    .boton-inferior{
             width: 100%;
             padding: 9px;
             font-size: 1em;
+            box-sizing: border-box;
+            text-align: center;
         
     }
 
@@ -635,4 +637,14 @@ thead th {
     .bicing-container {
     width: 50%;
     }
+    
+
 }
+
+@media (min-width: 550px) {
+    #pagar-button {
+        display: none;
+    }
+}
+
+  

@@ -216,8 +216,11 @@ function addArchiveButton(row, docId) {
 }
 
 // FUNCIÓN: Añadir botón de editar
+
 function addEditButton(row, docId) {
   const editButton = row.querySelector(".edit-button");
+  if (!editButton) return; // Verifica que el botón exista
+
   editButton.innerHTML = `
     <svg 
       xmlns="http://www.w3.org/2000/svg" 
@@ -230,28 +233,40 @@ function addEditButton(row, docId) {
       2.4025 15.9267 2.4025 15.5367 2.7925L13.485 4.84425L19.1567 10.515L21.2075 8.46375Z" />
     </svg>
   `;
+
   editButton.addEventListener("click", () => {
     const editableCells = [
       { cell: row.cells[1], key: "person" },
       { cell: row.cells[2], key: "amount" },
       { cell: row.cells[3], key: "description" }
     ];
-    const originalValues = editableCells.map(({ cell, key }) => ({
+
+    // Verifica que todas las celdas existan
+    const validEditableCells = editableCells.filter(({ cell }) => cell !== undefined && cell !== null);
+    if (validEditableCells.length !== editableCells.length) {
+      console.warn("Algunas celdas no existen en esta fila.");
+      return;
+    }
+
+    const originalValues = validEditableCells.map(({ cell, key }) => ({
       key,
       originalValue: key === "amount"
         ? parseFloat(cell.textContent) || 0
         : cell.textContent.trim()
     }));
-    editableCells.forEach(({ cell, key }) => {
+
+    validEditableCells.forEach(({ cell, key }) => {
       const originalValue = key === "amount"
         ? parseFloat(cell.textContent) || 0
         : cell.textContent.trim();
+
       const input = document.createElement("input");
       input.type = key === "amount" ? "number" : "text";
       input.value = originalValue;
       input.className = "edit-input";
       cell.innerHTML = "";
       cell.appendChild(input);
+
       const saveChanges = async () => {
         const newValue = key === "amount"
           ? parseFloat(input.value) || 0
@@ -268,30 +283,37 @@ function addEditButton(row, docId) {
         }
         cleanup();
       };
+
       const cancelChanges = () => {
         cell.textContent = 
           key === "amount" ? `${originalValue.toFixed(2)} €` : originalValue;
         cleanup();
       };
+
       const handleKeyDown = (e) => {
         if (e.key === "Escape") cancelChanges();
         if (e.key === "Enter") saveChanges();
       };
+
       input.addEventListener("keydown", handleKeyDown);
       input.addEventListener("blur", saveChanges);
+
       function cleanup() {
         input.removeEventListener("keydown", handleKeyDown);
         input.removeEventListener("blur", saveChanges);
       }
     });
+
     const handleOutsideClick = async (e) => {
       if (!row.contains(e.target)) {
-        await Promise.all(editableCells.map(async ({ cell, key }) => {
+        await Promise.all(validEditableCells.map(async ({ cell, key }) => {
           const input = cell.querySelector("input");
+          if (!input) return;
           const newValue = key === "amount"
             ? parseFloat(input.value) || 0
             : input.value.trim();
           const origVal = originalValues.find((v) => v.key === key).originalValue;
+
           if (newValue !== origVal) {
             const updateData = {};
             updateData[key] = newValue;
@@ -308,10 +330,12 @@ function addEditButton(row, docId) {
         cleanupOutside();
       }
     };
+
     function cleanupOutside() {
       document.removeEventListener("click", handleOutsideClick);
       document.removeEventListener("touchstart", handleOutsideClick);
     }
+
     document.addEventListener("click", handleOutsideClick);
     document.addEventListener("touchstart", handleOutsideClick);
   });
@@ -500,13 +524,14 @@ document.getElementById("archive-all-debts").addEventListener("click", async () 
 });
 
 // BOTÓN: Mostrar/ocultar deudas archivadas
+// BOTÓN: Mostrar/ocultar deudas archivadas
 document.getElementById("show-archived").addEventListener("click", async () => {
   const archivedDebtsContainer = document.getElementById("archived-debts");
   if (!archivedDebtsContainer) return;
-  if (archivedDebtsContainer.style.display === "none") {
+
+  if (archivedDebtsContainer.style.display === "none" || archivedDebtsContainer.style.display === "") {
     archivedDebtsContainer.style.display = "block";
     archivedDebtsContainer.innerHTML = "";
-
     unsubscribeArchived = db
       .collection("debts")
       .where("archived", "==", true)
@@ -516,10 +541,8 @@ document.getElementById("show-archived").addEventListener("click", async () => {
           archivedDebtsContainer.innerHTML = "<p>No hay deudas archivadas.</p>";
           return;
         }
-
         archivedDebtsContainer.innerHTML = "<ul class='archived-list'></ul>";
         const list = archivedDebtsContainer.querySelector(".archived-list");
-        
         snapshot.forEach((doc) => {
           const debt = doc.data();
           const li = document.createElement("li");
@@ -538,34 +561,6 @@ document.getElementById("show-archived").addEventListener("click", async () => {
           `;
           list.appendChild(li);
         });
-        
-
-        document.querySelectorAll(".delete-button").forEach((btn) => {
-          btn.addEventListener("click", async (e) => {
-            const debtId = e.currentTarget.dataset.id;
-            const card = e.currentTarget.closest(".archived-card");
-            if (!card) return;
-            try {
-              await db.collection("debts").doc(debtId).delete();
-              card.remove();
-            } catch (error) {
-              console.error("Error al eliminar la deuda archivada:", error);
-            }
-          });
-        });
-        document.querySelectorAll(".unarchive-button").forEach((btn) => {
-          btn.addEventListener("click", async (e) => {
-            const debtId = e.currentTarget.dataset.id;
-            const card = e.currentTarget.closest(".archived-card");
-            if (!card) return;
-            try {
-              await db.collection("debts").doc(debtId).update({ archived: false });
-              card.remove();
-            } catch (error) {
-              console.error("Error al desarchivar la deuda:", error);
-            }
-          });
-        });
       });
   } else {
     archivedDebtsContainer.style.display = "none";
@@ -576,3 +571,44 @@ document.getElementById("show-archived").addEventListener("click", async () => {
     }
   }
 });
+
+
+// Delegación de eventos para botones en deudas archivadas
+const archivedDebtsContainer = document.getElementById("archived-debts");
+if (archivedDebtsContainer) {
+  archivedDebtsContainer.addEventListener("click", async (event) => {
+    const target = event.target;
+
+    // Encontrar el botón más cercano en caso de que el click sea en el SVG o en el texto
+    const deleteButton = target.closest(".delete-button");
+    const unarchiveButton = target.closest(".unarchive-button");
+
+    if (deleteButton) {
+      const debtId = deleteButton.dataset.id;
+      const listItem = deleteButton.closest(".archived-item");
+      if (!debtId || !listItem) return;
+
+      try {
+        await db.collection("debts").doc(debtId).delete();
+        listItem.remove();
+      } catch (error) {
+        console.error("Error al eliminar la deuda archivada:", error);
+        alert("Ocurrió un error al eliminar la deuda archivada.");
+      }
+    }
+
+    if (unarchiveButton) {
+      const debtId = unarchiveButton.dataset.id;
+      const listItem = unarchiveButton.closest(".archived-item");
+      if (!debtId || !listItem) return;
+
+      try {
+        await db.collection("debts").doc(debtId).update({ archived: false });
+        listItem.remove();
+      } catch (error) {
+        console.error("Error al desarchivar la deuda:", error);
+        alert("Ocurrió un error al desarchivar la deuda.");
+      }
+    }
+  });
+}
