@@ -1,7 +1,6 @@
 :root {
     --rosaclaro: #ffefef;
     --rosaoscuro: #ff4081;
-    --rosaoscurohover: #ff3075;
 }
 
 body {
@@ -18,29 +17,6 @@ body {
     padding: 20px;
     background: var(--rosaclaro);
     margin-top: 70px;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.8em;
-    color: #333;
-}
-
-.form-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.form-container button, .form-container input {
-    flex: 1 1 calc(50% - 10px);
-    padding: 10px;
-    font-size: 1em;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-sizing: border-box;
 }
 
 table {
@@ -132,11 +108,7 @@ td:nth-child(5) {
     display: block;
 }
 
-.delete-all-button {
-    margin-bottom: 5px;
-}
-
-.show-archived {
+.boton-inferior {
     display: inline-block;
     padding: 10px 20px;
     font-size: 1em;
@@ -150,7 +122,7 @@ td:nth-child(5) {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.show-archived:hover {
+.boton-inferior:hover {
     transform: scale(1.025);
     background-color: var(--rosaoscuro);
     color: #fff;
@@ -218,10 +190,6 @@ button.archive-button:hover svg {
     font-size: 1.5em;
     font-weight: bold;
     color: white;
-}
-
-.table {
-    margin-top: 20px;
 }
 
 .hidden {
@@ -295,6 +263,7 @@ button.archive-button:hover svg {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    gap: 10px;
 }
 
 .left-side {
@@ -305,7 +274,7 @@ button.archive-button:hover svg {
 .right-side {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
 }
 
 #start-add-debt {
@@ -338,11 +307,12 @@ button.archive-button:hover svg {
   
 .bicing-container {
     display: flex;
-        gap: 0; /* Sin espacio entre los botones */
+    gap: 0px; /* Sin espacio entre los botones */
     border: 2px solid var(--rosaoscuro); /* Borde externo */
     border-radius: 15px; /* Borde redondeado para el contenedor general */
     overflow: hidden; /* Para evitar que los bordes sobresalgan */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    height: 38.5px;
 
   }
 
@@ -467,15 +437,6 @@ button.edit-button {
     transition: transform 0.2s ease, fill 0.2s ease;
 }
 
-button.edit-button:hover img {
-    transform: scale(1.2);
-    opacity: 0.8;
-}
-
-.editable {
-    cursor: pointer;
-}
-
 .edit-input {
     display: block;
     width: 100%;
@@ -489,78 +450,78 @@ button.edit-button:hover img {
     box-sizing: content-box;
 }
 
-.editable:hover {
-    background-color: #f0f0f0;
-}
-
-td.editable-cell {
-    padding: 0;
+.archived-list {
     margin: 0;
-    text-align: left;
-    vertical-align: middle;
-    background-color: inherit;
-}
-
-.archived-debts {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
-    gap: 0.5rem !important;
-    width: 100% !important;
-    margin: 0 auto;
-    align-items: center;
-    justify-items: center;
-    margin-top: 20px;
-}
-
-.archived-card {
-    background: linear-gradient(135deg, #ffffff, #f1f1f5);
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 10px;
-    width: 90%;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    text-align: center;
-    transform: none;
-}
-
-.archived-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.archived-card h4 {
-    margin: 5px 0;
-    font-size: 1.2em;
-    color: #444;
-}
-
-.archived-card p {
-    margin: 5px 0;
-    font-size: 1em;
-    color: #666;
-}
-
-.archived-actions {
+    padding: 0;
+    list-style: none;
+    width: 100%;
+  }
+  
+  .archived-item {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    gap: 10px;
+  }
+  
+  .archived-left {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  
+  .archived-left strong {
+    font-size: 1.1em;
+    color: #444;
+  }
+  
+  .archived-left span {
+    font-weight: bold;
+    color: #b71c1c;
+  }
+  
+  .archived-left em {
+    color: #666;
+    font-style: normal;
+  }
+  
+  .archived-left small {
+    color: #999;
+    font-size: 0.85em;
+  }
+  
+  .archived-right {
+    display: flex;
     gap: 5px;
+    flex-direction: column;
 }
-
-.archived-actions button {
-    background: var(--rosaoscuro);
-    color: white;
+  
+  .archived-right button {
+    background: #ff4081;
+    color: #fff;
     border: none;
     border-radius: 5px;
-    padding: 8px 12px;
+    padding: 6px 10px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    width: 100%;
-}
+  }
+  
+  .archived-right button:hover {
+    background: #d8356c;
+  }
 
-.archived-actions button:hover {
-    background-color: #818b93;
-}
+  @media (min-width: 500px) {
+    .archived-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 0px;
+    }
+    }
 
 thead th {
     background-color: var(--rosaoscuro);
@@ -577,10 +538,6 @@ thead th {
         align-items: center;
     }
 
-    h1 {
-        font-size: 1.5em;
-    }
-
     .form-container {
         flex-direction: column;
         gap: 10px;
@@ -592,17 +549,6 @@ thead th {
         overflow-x: auto;
         white-space: nowrap;
         align-self: center;
-    }
-
-    #summary {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 10px;
-    }
-
-    .form-container {
-        gap: 8px;
     }
 
     input, button {
@@ -687,10 +633,6 @@ thead th {
     }
 
     .bicing-container {
-width: 50%;
+    width: 50%;
     }
-
-
-
-
 }
