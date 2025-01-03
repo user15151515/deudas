@@ -102,9 +102,6 @@ debtsCollection.onSnapshot((snapshot) => {
           </div>
         </td>
       `;
-      
-      
-      
     
     // Nuevo: Escuchar el checkbox en lugar del botón
 const statusCheckbox = row.querySelector(".status-toggle");
@@ -120,13 +117,8 @@ statusCheckbox.addEventListener("change", async () => {
     row.classList.toggle("not-paid", !statusCheckbox.checked);
 });
 
-
         // Añadir el botón de papelera si corresponde
         addArchiveButton(row, doc.id);
-
-
-
-
         debtTable.appendChild(row);
     });
 
@@ -204,8 +196,6 @@ document.addEventListener("keydown", (e) => {
     closeWizard();
   }
 });
-
-
   // Ocultar wizard y resetear al añadir deuda
 // Ocultar wizard y resetear al añadir deuda
 addDebtButton.addEventListener("click", async () => {
@@ -302,8 +292,6 @@ debtsCollection.onSnapshot((snapshot) => {
         </td>
       `;
       
-      
-      
     // Nuevo: Escuchar el checkbox en lugar del botón
 const statusCheckbox = row.querySelector(".status-toggle");
 statusCheckbox.addEventListener("change", async () => {
@@ -346,7 +334,6 @@ function updatePaymentSummary() {
         paymentSummary.textContent = `ningú deu res 🥳`;
     }
 }
-
 
 function makeCellEditable(cell, fieldKey, docId) {
     const originalValue = cell.textContent.trim();
@@ -413,8 +400,6 @@ function makeCellEditable(cell, fieldKey, docId) {
     document.addEventListener("touchstart", handleOutsideClick);
     input.addEventListener("keydown", handleKeyDown);
 }
-
-
 
 function addEditButton(row, docId) {
     const editButton = document.createElement("button");
@@ -668,29 +653,36 @@ function normalizeName(name) {
         .replace(/[\u0300-\u036f]/g, ""); // Elimina acentos
 }
 
-// Evento para sumar Bicing (+)
-const addBicingButton = document.getElementById("add-bicing-button");
-addBicingButton.addEventListener("click", async () => {
+// Evento para añadir un bicing (clic en el botón principal)
+document.getElementById("bicing-button").addEventListener("click", async () => {
   let existingBicingDebt = null;
 
   // Buscar si ya existe una deuda de Bicing para Jana
-  const snapshot = await debtsCollection.where("archived", "==", false).get();
+  const snapshot = await debtsCollection
+    .where("archived", "==", false)
+    .get();
+
   snapshot.forEach((doc) => {
     const debt = doc.data();
     if (
       normalizeName(debt.person) === "jana" &&
-      debt.description.startsWith("bicing")
+      debt.description.toLowerCase().startsWith("bicing")
     ) {
       existingBicingDebt = { id: doc.id, data: debt };
     }
   });
 
   if (existingBicingDebt) {
-    // Si ya existe, actualiza la cantidad y descripción
-    const newAmount = existingBicingDebt.data.amount + 0.35;
-    const descriptionMatch = existingBicingDebt.data.description.match(/x(\d+)/);
-    const count = descriptionMatch ? parseInt(descriptionMatch[1]) + 1 : 2;
-    const newDescription = `bicing x${count}`;
+    // Si ya existe, actualiza la cantidad y 'xN' de la descripción
+    const newAmount = parseFloat((existingBicingDebt.data.amount + 0.35).toFixed(2));
+
+    let count = 1;
+    const match = existingBicingDebt.data.description.match(/x(\d+)/);
+    if (match) {
+      count = parseInt(match[1], 10);
+    }
+    const newCount = count + 1;
+    const newDescription = `bicing x${newCount}`;
 
     await debtsCollection.doc(existingBicingDebt.id).update({
       amount: newAmount,
@@ -709,42 +701,114 @@ addBicingButton.addEventListener("click", async () => {
   }
 });
 
-const subtractBicingButton = document.getElementById("subtract-bicing-button");
-// Evento para restar Bicing (-)
-subtractBicingButton.addEventListener("click", async () => {
+// Evento para restar un bicing (clic en el botón de restar)
+document.getElementById("subtract-bicing-button").addEventListener("click", async (event) => {
+  // Prevenir que el clic en el botón de restar active el botón de Bicing
+  event.stopPropagation();
+
   let existingBicingDebt = null;
-  const snapshot = await debtsCollection.where("archived", "==", false).get();
+
+  // Buscar si ya existe una deuda de Bicing para Jana
+  const snapshot = await debtsCollection
+    .where("archived", "==", false)
+    .get();
 
   snapshot.forEach((doc) => {
     const debt = doc.data();
     if (
       normalizeName(debt.person) === "jana" &&
-      debt.description.startsWith("bicing")
+      debt.description.toLowerCase().startsWith("bicing")
     ) {
       existingBicingDebt = { id: doc.id, data: debt };
     }
   });
 
-  // Si existe la deuda, restamos 0.35; si llega a 0 o menos, puedes decidir si eliminarla o dejarla en 0
   if (existingBicingDebt) {
-    const newAmount = existingBicingDebt.data.amount - 0.35;
-    if (newAmount <= 0) {
-      // Opcional: Eliminar la deuda o ponerla a 0, a gusto
+    // Si existe, restamos 0.35
+    const oldAmount = existingBicingDebt.data.amount;
+    const newAmount = parseFloat((oldAmount - 0.35).toFixed(2));
+
+    // Revisar cuántos 'bicing xN' había
+    let count = 1;
+    const match = existingBicingDebt.data.description.match(/x(\d+)/);
+    if (match) {
+      count = parseInt(match[1], 10);
+    }
+
+    // Restamos uno al recuento
+    const newCount = count - 1;
+
+    if (newCount <= 0 || newAmount <= 0) {
+      // Si ya no quedan bicings, o el importe es 0 o menos => Eliminamos la deuda
       await debtsCollection.doc(existingBicingDebt.id).delete();
     } else {
-      const descriptionMatch = existingBicingDebt.data.description.match(/x(\d+)/);
-      // Cálculo para el contador dentro de la descripción (si existía y no llega a 1)
-      let count = 1;
-      if (descriptionMatch) {
-        const currentCount = parseInt(descriptionMatch[1]);
-        count = currentCount > 1 ? currentCount - 1 : 1;
-      }
-      const newDescription = count > 1 ? `bicing x${count}` : `bicing`;
-
+      // Actualizamos la descripción con el nuevo recuento
+      const newDescription = newCount === 1 ? "bicing" : `bicing x${newCount}`;
       await debtsCollection.doc(existingBicingDebt.id).update({
         amount: newAmount,
         description: newDescription,
       });
     }
+  }
+  // Si no existe, simplemente no hace nada al restar
+});
+
+
+
+// Evento para marcar todas las deudas como pagadas
+document.getElementById("mark-all-paid").addEventListener("click", async () => {
+  const button = document.getElementById("mark-all-paid");
+  const snapshot = await debtsCollection.get();
+
+  if (button.textContent === "Marcar tot com a pagat") {
+      // Marcar todas como pagadas
+      try {
+          const batch = db.batch(); // Usar batch para optimizar las escrituras
+          snapshot.forEach((doc) => {
+              if (doc.data().status !== "completed") {
+                  const debtRef = debtsCollection.doc(doc.id);
+                  batch.update(debtRef, { status: "completed" });
+              }
+          });
+          await batch.commit(); // Aplicar todas las actualizaciones
+          button.textContent = "Marcar totes com a no pagades";
+      } catch (error) {
+          console.error("Error al marcar totes les deutes com a pagades:", error);
+      }
+  } else {
+      // Marcar todas como no pagadas
+      try {
+          const batch = db.batch();
+          snapshot.forEach((doc) => {
+              if (doc.data().status === "completed") {
+                  const debtRef = debtsCollection.doc(doc.id);
+                  batch.update(debtRef, { status: "not-paid" });
+              }
+          });
+          await batch.commit();
+          button.textContent = "Marcar tot com a pagat";
+      } catch (error) {
+          console.error("Error al marcar totes les deutes com a no pagades:", error);
+      }
+  }
+});
+
+// Evento para archivar todas las deudas
+document.getElementById("archive-all-debts").addEventListener("click", async () => {
+  try {
+    const snapshot = await debtsCollection.get();
+    const batch = db.batch(); // Usar batch para optimizar las escrituras
+
+    snapshot.forEach((doc) => {
+      if (!doc.data().archived) { // Solo archivar las que no están archivadas
+        const debtRef = debtsCollection.doc(doc.id);
+        batch.update(debtRef, { archived: true });
+      }
+    });
+
+    await batch.commit(); // Aplicar todas las actualizaciones
+  } catch (error) {
+    console.error("Error al archivar todas las deudas:", error);
+    alert("Ocurrió un error al intentar archivar las deudas.");
   }
 });

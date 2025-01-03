@@ -136,23 +136,24 @@ td:nth-child(5) {
     margin-bottom: 5px;
 }
 
-#show-archived {
-    display: block;
-    margin: 15px auto;
-    padding: 15px 20px;
-    background-color: var(--rosaoscuro);
-    color: white;
-    border: none;
-    border-radius: 6px;
+.show-archived {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    background-color: transparent;
+    color: var(--rosaoscuro);
+    border: 2px solid var(--rosaoscuro);
+    border-radius: 15px;
     cursor: pointer;
-    max-width: 300px;
-    transition: transform 0.3s;
-    font-weight: 600;
-    font-size: medium;
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-#show-archived:hover {
-    transform: scale(1.01);
+.show-archived:hover {
+    transform: scale(1.025);
+    background-color: var(--rosaoscuro);
+    color: #fff;
 }
 
 button.archive-button {
@@ -324,7 +325,7 @@ button.archive-button:hover svg {
 }
 
 #start-add-debt:hover {
-    transform: scale(1.05);
+    transform: scale(1.025);
     background-color: var(--rosaoscuro);
     color: #fff;
 }
@@ -332,9 +333,82 @@ button.archive-button:hover svg {
 .button-container {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 10px; /* Espacio entre 'Afegir Deuda' y el contenedor de Bicing */
+  }
+  
+.bicing-container {
+    display: flex;
+        gap: 0; /* Sin espacio entre los botones */
+    border: 2px solid var(--rosaoscuro); /* Borde externo */
+    border-radius: 15px; /* Borde redondeado para el contenedor general */
+    overflow: hidden; /* Para evitar que los bordes sobresalgan */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  }
+
+#bicing-button {
+    display: block;
+    margin: 0;
+    width: auto;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    background-color: transparent;
+    color: var(--rosaoscuro);
+    border: none; /* Eliminar bordes internos */
+    border-right: 2px solid var(--rosaoscuro); /* Línea divisoria */
+
+    border-radius: 0px;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
+
 }
+
+
+#bicing-button:hover {
+    transform: scale(1.025);
+    background-color: var(--rosaoscuro);
+    color: #fff;
+}
+
+.subtract-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: var(--rosaoscuro);
+    border: none;
+    width: 32px;
+    height: 43px;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+  
+  .subtract-button svg {
+    fill: var(--rosaoscuro);
+    width: 16px; /* Tamaño del ícono */
+    height: 16px;
+  }
+  
+  .subtract-button:hover {
+    background-color: var(--rosaoscuro);
+    transform: scale(1.025);
+    color: #fff;
+  }
+  
+  .subtract-button:hover svg {
+    fill: #fff;
+  }
+
+
+.button-group {
+    display: flex;
+    gap: 10px; /* Espaciado entre los botones */
+    margin-top: 20px; /* Mantiene la separación del resto de los elementos */
+}
+
+
 
 .close-wizard {
     position: absolute;
@@ -435,6 +509,7 @@ td.editable-cell {
     margin: 0 auto;
     align-items: center;
     justify-items: center;
+    margin-top: 20px;
 }
 
 .archived-card {
@@ -494,49 +569,7 @@ thead th {
     font-weight: bold;
 }
 
-.bicing-container {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background-color: transparent;
-    border: 2px solid var(--rosaoscuro);
-    border-radius: 15px;
-    padding: 5px 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    max-width: 250px;
-    margin: 0;
-    width: auto;
-}
 
-.bicing-label {
-    font-size: 1rem;
-    font-weight: bold;
-    color: var(--rosaoscuro);
-    margin-right: 5px;
-}
-
-.bicing-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.bicing-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--rosaoscuro);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-.bicing-button:hover {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
 
 @media (max-width: 550px) {
     .container {
@@ -553,11 +586,6 @@ thead th {
         gap: 10px;
     }
 
-    input, button {
-        flex: 1 1 100%;
-        font-size: 0.9em;
-    }
-
     table {
         font-size: 1em;
         display: block;
@@ -571,12 +599,6 @@ thead th {
         align-items: center;
         text-align: center;
         gap: 10px;
-    }
-
-    #show-archived {
-        max-width: 90%;
-        padding: 9px;
-        font-size: 0.8em;
     }
 
     .form-container {
@@ -612,22 +634,6 @@ thead th {
         text-overflow: ellipsis;
     }
 
-    .button-container {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        justify-content: space-between;
-        width: 100%;
-    }
-
-    .bicing-buttons {
-        gap: 5px;
-    }
-
-    .bicing-label {
-        font-weight: bold;
-        font-size: 0.9rem;
-    }
 
     tr {
         height: 20px;
@@ -642,20 +648,49 @@ thead th {
         padding: 12px 15px;
     }
 
-    #bicing-container, #start-add-debt {
-        width: 100%;
-        max-width: 90%;
-        padding: 10.5px;
-        box-sizing: border-box;
+
+    #bicing-button {
+        width: 75%; 
     }
 
-    #bicing-container .bicing-buttons {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
+    .subtract-button {
+        width: 25%;
     }
 
-    #bicing-container .bicing-buttons button {
-        width: 48%;
+    .subtract-button:hover, #mark-all-paid:hover, #archive-all-debts:hover, #show-archived:hover, #bicing-button:hover{
+        transform: scale(1);
+        background-color: transparent;
+        color: var(--rosaoscuro);
     }
+
+    .subtract-button:hover svg {
+        fill: var(--rosaoscuro);
+      }
+    
+
+    #mark-all-paid, #archive-all-debts, #show-archived {
+            width: 100%;
+            padding: 9px;
+            font-size: 1em;
+        
+    }
+
+    .button-group {
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #start-add-debt {
+        width: 50%;
+
+    }
+
+    .bicing-container {
+width: 50%;
+    }
+
+
+
+
 }

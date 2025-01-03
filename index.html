@@ -24,16 +24,25 @@
   <!-- Main Container -->
   <div class="container">
 
-    <!-- Button Container -->
-    <div class="button-container">
-      <button id="start-add-debt" class="primary-button">Afegir Deuda</button>
-      <div class="bicing-container">
-        <span class="bicing-label">Bicing</span>
-        <div class="bicing-buttons">
-          <button id="subtract-bicing-button" class="bicing-button minus-button">-</button>
-          <button id="add-bicing-button" class="bicing-button plus-button">+</button>
-        </div>
-      </div>
+<!-- Button Container -->
+<div class="button-container">
+  <button id="start-add-debt" class="primary-button">Afegir Deuda</button>
+  
+  <!-- Contenedor para el botón de Bicing y el botón de restar -->
+  <div class="bicing-container">
+    <button id="bicing-button" class="primary-button bicing-button">
+      Bicing
+    </button>
+    <button id="subtract-bicing-button" class="subtract-button" title="Restar Bicing">
+      <!-- SVG para el signo de restar -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+        <path d="M19 13H5v-2h14v2z"/>
+      </svg>
+    </button>
+</div>
+
+
+
     </div>
 
     <!-- Wizard Form -->
@@ -73,7 +82,12 @@
     </table>
 
     <!-- Archived Debts -->
-    <button id="show-archived" class="show-archived">Mostrar deudas archivadas</button>
+    <div class="button-group">
+      <button id="show-archived" class="show-archived">Mostrar deudas archivadas</button>
+      <button id="mark-all-paid" class="show-archived">Marcar tot com a pagat</button>
+      <button id="archive-all-debts" class="show-archived">Arxivar tot</button>
+
+    </div>
     <div id="archived-debts" class="archived-debts" style="display: none;">
       <div class="archived-actions" style="display: none;">
         <button class="delete-button" style="display: none;">
