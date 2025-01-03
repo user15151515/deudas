@@ -603,7 +603,7 @@ thead th {
         width: 25%;
     }
 
-    .subtract-button:hover, #mark-all-paid:hover, #archive-all-debts:hover, #show-archived:hover, #bicing-button:hover{
+    .subtract-button:hover, #bicing-button:hover, .boton-inferior:hover {
         transform: scale(1);
         background-color: transparent;
         color: var(--rosaoscuro);
