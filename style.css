@@ -1,8 +1,34 @@
+/* Variables */
 :root {
     --rosaclaro: #ffefef;
     --rosaoscuro: #ff4081;
+
+    --font-primary: 'Roboto', Arial, sans-serif;
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    --box-shadow-main: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+    --cubic-bezier: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* Estilos de la barra de desplazamiento */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #ffc1e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--rosaoscuro);
+    border-radius: 4px;
+    border: 1px solid #ffc1e1;
+}
+
+/* Estilos globales */
 body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
@@ -19,40 +45,78 @@ body {
     margin-top: 70px;
 }
 
+/* Estilos de la tabla */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow-main);
+}
+
+thead th {
+    background-color: var(--rosaoscuro);
+    color: #fff;
+    padding: 12px 15px;
+    font-weight: bold;
+    position: relative;
+    user-select: none;
+    font-size: 1em;
+}
+
+th.sortable {
+    cursor: pointer;
+    transition: background-color var(--transition-medium);
+}
+
+th.sortable:hover {
+    background-color: #e3356f;
+}
+
+tbody {
+    background-color: #FFEBEB;
 }
 
 th, td {
     padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid #eee;
-    background-color: #FFEBEB;
-    font-weight: bold;
+    border-bottom: 1px solid #ffe5e6;
     vertical-align: middle;
+    font-weight: normal;
+    font-size: 0.95em;
 }
 
 tr {
     height: 50px;
+    transition: background-color 0.2s ease;
+}
+
+tr:hover:not(.completed):not(.not-paid) {
+    background-color: #ffc2d1;
+    cursor: default;
 }
 
 tr.not-paid td {
     background-color: #ffe5e6;
     color: #b71c1c;
+    transition: background-color var(--transition-medium), color var(--transition-medium);
+    font-weight: bold;
 }
 
 tr.completed td {
     background-color: #e7f5e7;
     color: #2e7d32;
     text-decoration: line-through;
+    transition: background-color var(--transition-medium), color var(--transition-medium);
+    font-weight: normal;
 }
 
 td:nth-child(5) {
     text-align: left !important;
 }
 
+/* Estilos de los checkboxes */
 .check-container {
     display: inline-flex;
     align-items: center;
@@ -108,6 +172,7 @@ td:nth-child(5) {
     display: block;
 }
 
+/* Estilos de los botones */
 .boton-inferior {
     display: inline-block;
     padding: 10px 20px;
@@ -154,6 +219,71 @@ button.archive-button:hover svg {
     opacity: 0.8;
 }
 
+button.edit-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-top: 5px;
+    scale: 95%;
+    fill: var(--rosaoscuro);
+}
+
+.edit-button svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--rosaoscuro);
+    transition: transform 0.2s ease, fill 0.2s ease;
+}
+
+.subtract-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: var(--rosaoscuro);
+    border: none;
+    width: 32px;
+    height: 43px;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.subtract-button svg {
+    fill: var(--rosaoscuro);
+    width: 16px;
+    height: 16px;
+}
+
+.subtract-button:hover {
+    background-color: var(--rosaoscuro);
+    transform: scale(1.025);
+    color: #fff;
+}
+
+.subtract-button:hover svg {
+    fill: #fff;
+}
+
+.next-button, .primary-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--rosaoscuro);
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+.next-button:hover, .primary-button:hover {
+    transform: scale(1.05);
+    background-color: #367c3a;
+}
+
+/* Estilos del menú principal */
 .main-menu {
     position: fixed;
     top: 0;
@@ -193,10 +323,12 @@ button.archive-button:hover svg {
     color: white;
 }
 
+/* Elementos ocultos */
 .hidden {
     display: none;
 }
 
+/* Estilos del asistente (wizard) */
 .wizard {
     position: fixed;
     top: 0;
@@ -243,22 +375,25 @@ button.archive-button:hover svg {
     color: white;
 }
 
-.next-button, .primary-button {
-    padding: 10px 20px;
-    font-size: 1.2em;
+.close-wizard {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+    background: none;
     border: none;
-    border-radius: 5px;
-    background-color: var(--rosaoscuro);
+    font-size: 2em;
     color: white;
     cursor: pointer;
-    margin-top: 10px;
-    transition: transform 0.2s, background-color 0.3s;
-}
-.next-button:hover, .primary-button:hover {
-    transform: scale(1.05);
-    background-color: #367c3a;
+    z-index: 100;
+    transition: transform 0.3s, color 0.3s;
 }
 
+.close-wizard:hover {
+    color: #ff6666;
+    transform: scale(1.2);
+}
+
+/* Estilos de las celdas de estado */
 .status-cell {
     display: flex;
     align-items: center;
@@ -278,6 +413,7 @@ button.archive-button:hover svg {
     gap: 10px;
 }
 
+/* Estilos para agregar deuda */
 #start-add-debt {
     display: block;
     margin: 0;
@@ -300,22 +436,22 @@ button.archive-button:hover svg {
     color: #fff;
 }
 
+/* Contenedores de botones */
 .button-container {
     display: flex;
     align-items: center;
-    gap: 10px; /* Espacio entre 'Afegir Deuda' y el contenedor de Bicing */
-  }
-  
+    gap: 10px;
+}
+
 .bicing-container {
     display: flex;
-    gap: 0px; /* Sin espacio entre los botones */
-    border: 2px solid var(--rosaoscuro); /* Borde externo */
-    border-radius: 15px; /* Borde redondeado para el contenedor general */
-    overflow: hidden; /* Para evitar que los bordes sobresalgan */
+    gap: 0px;
+    border: 2px solid var(--rosaoscuro);
+    border-radius: 15px;
+    overflow: hidden;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     height: 38.5px;
-
-  }
+}
 
 #bicing-button {
     display: block;
@@ -326,15 +462,12 @@ button.archive-button:hover svg {
     font-weight: bold;
     background-color: transparent;
     color: var(--rosaoscuro);
-    border: none; /* Eliminar bordes internos */
-    border-right: 2px solid var(--rosaoscuro); /* Línea divisoria */
-
+    border: none;
+    border-right: 2px solid var(--rosaoscuro);
     border-radius: 0px;
     cursor: pointer;
     transition: transform 0.3s, background-color 0.3s, color 0.3s;
-
 }
-
 
 #bicing-button:hover {
     transform: scale(1.025);
@@ -342,123 +475,22 @@ button.archive-button:hover svg {
     color: #fff;
 }
 
-.subtract-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-    color: var(--rosaoscuro);
-    border: none;
-    width: 32px;
-    height: 43px;
-    cursor: pointer;
-    padding: 0;
-    transition: background-color 0.3s, color 0.3s, transform 0.2s;
-}
-  
-  .subtract-button svg {
-    fill: var(--rosaoscuro);
-    width: 16px; /* Tamaño del ícono */
-    height: 16px;
-  }
-  
-  .subtract-button:hover {
-    background-color: var(--rosaoscuro);
-    transform: scale(1.025);
-    color: #fff;
-  }
-  
-  .subtract-button:hover svg {
-    fill: #fff;
-  }
-
-
+/* Grupo de botones */
 .button-group {
     display: flex;
-    gap: 10px; /* Espaciado entre los botones */
-    margin-top: 20px; /* Mantiene la separación del resto de los elementos */
+    gap: 10px;
+    margin-top: 20px;
 }
 
-
-
-.close-wizard {
-    position: absolute;
-    top: 30px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 2em;
-    color: white;
-    cursor: pointer;
-    z-index: 100;
-    transition: transform 0.3s, color 0.3s;
-}
-
-.close-wizard:hover {
-    color: #ff6666;
-    transform: scale(1.2);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-}
-
-button.edit-button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    margin-top: 5px;
-    scale: 95%;
-    fill: var(--rosaoscuro);
-}
-
-.edit-button svg {
-    width: 18px;
-    height: 18px;
-    fill: var(--rosaoscuro);
-    transition: transform 0.2s ease, fill 0.2s ease;
-}
-
-.edit-input {
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 4px;
-    font-size: 1em;
-    border: 2px dashed black;
-    border-radius: 8px;
-    background-color: transparent;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-    box-sizing: content-box;
-}
-
+/* Estilos de la lista archivada */
 .archived-list {
     margin: 0;
     padding: 0;
     list-style: none;
     width: 100%;
-  }
-  
-  .archived-item {
+}
+
+.archived-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -468,69 +500,95 @@ button.edit-button {
     margin: 8px 8px 0px 0px;
     border: 1px solid #ddd;
     gap: 10px;
-  }
-  
-  .archived-left {
+}
+
+.archived-left {
     display: flex;
     flex-direction: column;
     gap: 3px;
-  }
-  
-  .archived-left strong {
+}
+
+.archived-left strong {
     font-size: 1.1em;
     color: #444;
-  }
-  
-  .archived-left span {
+}
+
+.archived-left span {
     font-weight: bold;
     color: #b71c1c;
-  }
-  
-  .archived-left em {
+}
+
+.archived-left em {
     color: #666;
     font-style: normal;
-  }
-  
-  .archived-left small {
+}
+
+.archived-left small {
     color: #999;
     font-size: 0.85em;
-  }
-  
-  .archived-right {
+}
+
+.archived-right {
     display: flex;
     gap: 5px;
     flex-direction: column;
 }
-  
-  .archived-right button {
+
+.archived-right button {
     background: #ff4081;
     color: #fff;
     border: none;
     border-radius: 5px;
     padding: 6px 10px;
     cursor: pointer;
-  }
-  
-  .archived-right button:hover {
-    background: #d8356c;
-  }
-
-  @media (min-width: 500px) {
-    .archived-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 0px;
-    }
-    }
-
-thead th {
-    background-color: var(--rosaoscuro);
-    color: #fff;
-    padding: 12px 15px;
-    font-weight: bold;
 }
 
+.archived-right button:hover {
+    background: #d8356c;
+}
 
+/* Animaciones */
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+}
+
+@keyframes scaleFadeIn {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+}
+
+/* Media Queries */
+@media (min-width: 500px) {
+    .archived-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 0px;
+    }
+}
 
 @media (max-width: 550px) {
     .container {
@@ -580,7 +638,6 @@ thead th {
         text-overflow: ellipsis;
     }
 
-
     tr {
         height: 20px;
     }
@@ -593,7 +650,6 @@ thead th {
     th, td {
         padding: 12px 15px;
     }
-
 
     #bicing-button {
         width: 75%; 
@@ -611,16 +667,14 @@ thead th {
 
     .subtract-button:hover svg {
         fill: var(--rosaoscuro);
-      }
-    
+    }
 
     .boton-inferior{
-            width: 100%;
-            padding: 9px;
-            font-size: 1em;
-            box-sizing: border-box;
-            text-align: center;
-        
+        width: 100%;
+        padding: 9px;
+        font-size: 1em;
+        box-sizing: border-box;
+        text-align: center;
     }
 
     .button-group {
@@ -631,14 +685,11 @@ thead th {
 
     #start-add-debt {
         width: 50%;
-
     }
 
     .bicing-container {
-    width: 50%;
+        width: 50%;
     }
-    
-
 }
 
 @media (min-width: 550px) {
@@ -646,5 +697,3 @@ thead th {
         display: none;
     }
 }
-
-  
