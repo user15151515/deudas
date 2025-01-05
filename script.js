@@ -126,7 +126,7 @@ function renderTable(debtsArray) {
       row.classList.toggle("not-paid", !statusCheckbox.checked);
     });
     addArchiveButton(row, debt.id);
-    addEditButton(row, debt.id);
+    addDeleteButton(row, debt.id);
     debtTable.appendChild(row);
   });
 }
@@ -215,131 +215,51 @@ function addArchiveButton(row, docId) {
   lastCell.style.gap = "10px";
 }
 
-// FUNCIÓN: Añadir botón de editar
-
-function addEditButton(row, docId) {
-  const editButton = row.querySelector(".edit-button");
-  if (!editButton) return; // Verifica que el botón exista
-
-  editButton.innerHTML = `
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      viewBox="0 0 24 24" 
-      width="20" 
-      height="20"
-    >
-      <path d="M2.25 16.0788V21.75H7.92125L18.0642 11.607L12.3938 5.93675L2.25 16.0788ZM21.2075 
-      8.46375C21.5975 8.07375 21.5975 7.44125 21.2075 7.05125L16.9492 2.7925C16.5592 
-      2.4025 15.9267 2.4025 15.5367 2.7925L13.485 4.84425L19.1567 10.515L21.2075 8.46375Z" />
-    </svg>
+// FUNCIÓN: Añadir botón de eliminar
+function addDeleteButton(row, docId) {
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "delete-button";
+  deleteButton.innerHTML = `
+   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"></path>
+                </svg>
   `;
 
-  editButton.addEventListener("click", () => {
-    const editableCells = [
-      { cell: row.cells[1], key: "person" },
-      { cell: row.cells[2], key: "amount" },
-      { cell: row.cells[3], key: "description" }
-    ];
-
-    // Verifica que todas las celdas existan
-    const validEditableCells = editableCells.filter(({ cell }) => cell !== undefined && cell !== null);
-    if (validEditableCells.length !== editableCells.length) {
-      console.warn("Algunas celdas no existen en esta fila.");
-      return;
-    }
-
-    const originalValues = validEditableCells.map(({ cell, key }) => ({
-      key,
-      originalValue: key === "amount"
-        ? parseFloat(cell.textContent) || 0
-        : cell.textContent.trim()
-    }));
-
-    validEditableCells.forEach(({ cell, key }) => {
-      const originalValue = key === "amount"
-        ? parseFloat(cell.textContent) || 0
-        : cell.textContent.trim();
-
-      const input = document.createElement("input");
-      input.type = key === "amount" ? "number" : "text";
-      input.value = originalValue;
-      input.className = "edit-input";
-      cell.innerHTML = "";
-      cell.appendChild(input);
-
-      const saveChanges = async () => {
-        const newValue = key === "amount"
-          ? parseFloat(input.value) || 0
-          : input.value.trim();
-        if (newValue !== originalValue) {
-          const updateData = {};
-          updateData[key] = newValue;
-          await db.collection("debts").doc(docId).update(updateData);
-          cell.textContent = 
-            key === "amount" ? `${newValue.toFixed(2)} €` : newValue;
-        } else {
-          cell.textContent = 
-            key === "amount" ? `${originalValue.toFixed(2)} €` : originalValue;
-        }
-        cleanup();
-      };
-
-      const cancelChanges = () => {
-        cell.textContent = 
-          key === "amount" ? `${originalValue.toFixed(2)} €` : originalValue;
-        cleanup();
-      };
-
-      const handleKeyDown = (e) => {
-        if (e.key === "Escape") cancelChanges();
-        if (e.key === "Enter") saveChanges();
-      };
-
-      input.addEventListener("keydown", handleKeyDown);
-      input.addEventListener("blur", saveChanges);
-
-      function cleanup() {
-        input.removeEventListener("keydown", handleKeyDown);
-        input.removeEventListener("blur", saveChanges);
-      }
+  deleteButton.addEventListener("click", () => {
+    showCustomConfirmation(async () => {
+      await db.collection("debts").doc(docId).delete();
+      row.remove();
     });
+  });
 
-    const handleOutsideClick = async (e) => {
-      if (!row.contains(e.target)) {
-        await Promise.all(validEditableCells.map(async ({ cell, key }) => {
-          const input = cell.querySelector("input");
-          if (!input) return;
-          const newValue = key === "amount"
-            ? parseFloat(input.value) || 0
-            : input.value.trim();
-          const origVal = originalValues.find((v) => v.key === key).originalValue;
+  row.querySelector(".right-side").appendChild(deleteButton);
+}
 
-          if (newValue !== origVal) {
-            const updateData = {};
-            updateData[key] = newValue;
-            await db.collection("debts").doc(docId).update(updateData);
-            cell.textContent = key === "amount"
-              ? `${newValue.toFixed(2)} €`
-              : newValue;
-          } else {
-            cell.textContent = key === "amount"
-              ? `${origVal.toFixed(2)} €`
-              : origVal;
-          }
-        }));
-        cleanupOutside();
-      }
-    };
+function showCustomConfirmation(onConfirm) {
+  const overlay = document.createElement("div");
+  overlay.className = "custom-confirmation-overlay";
+  overlay.innerHTML = `
+    <div class="custom-confirmation">
+      <p>¿Estás seguro de que deseas eliminar esta deuda?</p>
+      <div class="button-group">
+        <button class="confirm-button">Sí</button>
+        <button class="cancel-button">No</button>
+      </div>
+    </div>
+  `;
 
-    function cleanupOutside() {
-      document.removeEventListener("click", handleOutsideClick);
-      document.removeEventListener("touchstart", handleOutsideClick);
-    }
+  document.body.appendChild(overlay);
 
-    document.addEventListener("click", handleOutsideClick);
-    document.addEventListener("touchstart", handleOutsideClick);
+  overlay.querySelector(".confirm-button").addEventListener("click", () => {
+    onConfirm();
+    document.body.removeChild(overlay);
+  });
+
+  overlay.querySelector(".cancel-button").addEventListener("click", () => {
+    document.body.removeChild(overlay);
   });
 }
+
 
 // WIZARD PARA AÑADIR DEUDA
 startAddDebt.addEventListener("click", () => {
