@@ -109,7 +109,7 @@ tr.completed td {
     color: #2e7d32;
     text-decoration: line-through;
     transition: background-color var(--transition-medium), color var(--transition-medium);
-    font-weight: normal;
+    font-weight: bold;
 }
 
 td:nth-child(5) {
@@ -536,11 +536,12 @@ button.edit-button {
 
 .archived-right button {
     background: #ff4081;
-    color: #fff;
+    color: #fffcfc;
     border: none;
     border-radius: 5px;
     padding: 6px 10px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .archived-right button:hover {

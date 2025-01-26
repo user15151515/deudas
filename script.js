@@ -220,9 +220,9 @@ function addDeleteButton(row, docId) {
   const deleteButton = document.createElement("button");
   deleteButton.className = "delete-button";
   deleteButton.innerHTML = `
-   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"></path>
-                </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+      <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"></path>
+    </svg>
   `;
 
   deleteButton.addEventListener("click", () => {
@@ -475,7 +475,7 @@ document.getElementById("show-archived").addEventListener("click", async () => {
               <small>${debt.date}</small>
             </div>
             <div class="archived-right">
-              <button class="delete-button" data-id="${doc.id}">Eliminar</button>
+              <button data-id="${doc.id}">Eliminar</button>
               <button class="unarchive-button" data-id="${doc.id}">Desarchivar</button>
             </div>
           `;
