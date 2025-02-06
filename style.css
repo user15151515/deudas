@@ -306,7 +306,6 @@ button.edit-button {
 .home-icon {
     width: 40px;
     height: 40px;
-    margin-right: 10px;
     cursor: pointer;
     transition: transform 0.2s ease, opacity 0.2s ease;
     vertical-align: middle;
@@ -781,3 +780,189 @@ button.edit-button {
         display: none;
     }
 }
+
+/* ---- Estilos generales de la barra de navegación ---- */
+.main-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ff4081; /* o var(--rosaoscuro) si usas variables */
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+  }
+  
+  /* La parte siempre visible: icono y resumen */
+  .menu-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-item {
+    margin-right: 10px;
+  }
+  
+  .home-icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    vertical-align: middle;
+  }
+  
+  .home-icon:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  
+  .summary-text {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+  }
+  
+  /* ---- Botón burger (siempre visible) ---- */
+  .menu-toggle {
+    display: block;  /* Aseguramos que se muestre siempre */
+    cursor: pointer;
+    padding: 10px;
+    margin-left: 10px;
+  }
+  
+  .menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: #fff;
+    transition: all 0.3s ease;
+  }
+  
+  /* ---- Menú desplegable con enlaces ---- */
+  .menu-links {
+    list-style: none;
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    background-color: rgba(255, 64, 129, 0.93); /* 0.5 es 50% de opacidad */    
+    position: absolute;
+    top: 100%;      /* Justo debajo de la barra de navegación */
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 10px 0;
+    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.2);
+    z-index: 101;
+  }
+  
+  .menu-links li {
+    margin: 10px 0;
+    text-align: center;
+  }
+  
+  .menu-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .menu-links a:hover {
+    color: #ffd1e1; /* Color de hover (opcional) */
+  }
+  
+  /* Mostrar el menú desplegable cuando se active (se añade la clase "open") */
+  .main-menu.open .menu-links {
+    display: flex;
+    animation: slideInDown 0.3s forwards;
+  }
+  
+  /* ---- Animación para el despliegue ---- */
+  @keyframes slideInDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  
+  @media (max-width: 550px) {
+    /* Reducir el padding y usar position relative para que los elementos absolutos se posicionen respecto a .main-menu */
+    .main-menu {
+      padding: 5px 10px;
+      /* Si quitaste el space-between en desktop, aquí usaremos una distribución central */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    /* Posicionar el botón burger de forma absoluta en la esquina superior derecha */
+    .menu-toggle {
+      position: absolute;
+      left: 10px;
+      cursor: pointer;
+      padding: 5px;
+      margin: 0; /* quitamos márgenes extras */
+      z-index: 2;  /* para asegurarnos que siempre esté por encima */
+    }
+    
+    .menu-toggle span {
+      width: 20px;  /* reducimos el tamaño */
+      height: 3px;
+      margin: 3px auto;
+    }
+    
+    /* Ajustar el contenedor con el icono y el mensaje */
+    .menu-content {
+      display: flex;
+      flex-direction: column;  /* Apilar el ícono y el mensaje en dos filas */
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    
+    /* Reducir tamaño del icono de casa */
+    .menu-item img.home-icon {
+      width: 30px;
+      height: 30px;
+    }
+    
+    /* Reducir la fuente y limitar el ancho del mensaje */
+    .summary-text {
+        font-size: 1.2rem;
+        text-align: center;
+        width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        vertical-align: middle;
+    }
+  }
+  
+  /* Por defecto, se muestra la copia para desktop y se oculta la de móviles */
+.desktop-only {
+    display: block;
+  }
+  .mobile-only {
+    display: none;
+  }
+  
+  /* En móviles (por ejemplo, hasta 550px) */
+  @media (max-width: 550px) {
+    .desktop-only {
+      display: none;
+    }
+    .mobile-only {
+      display: block;
+    }
+  }
+  

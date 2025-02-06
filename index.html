@@ -9,17 +9,43 @@
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="main-menu">
-    <div class="menu-content">
-      <a href="https://user15151515.github.io/jjjj/" class="menu-item">
+<!-- Navigation -->
+<nav class="main-menu">
+  <!-- Contenido siempre visible en desktop: solo el resumen (la copia de la casita para desktop) -->
+  <div class="menu-content">
+    <a href="https://user15151515.github.io/jjjj/" class="menu-item desktop-only">
+      <img src="imagenes/casa.png" alt="Inicio" class="home-icon">
+    </a>
+    <div class="summary-text" id="payment-summary">
+      Ningú deu res 🥳
+    </div>
+  </div>
+
+  <!-- Botón burger (siempre visible) -->
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- Menú desplegable (oculto por defecto) -->
+  <ul class="menu-links">
+    <!-- La copia de la casa para móviles -->
+    <li class="mobile-only">
+      <a href="https://user15151515.github.io/jjjj/">
         <img src="imagenes/casa.png" alt="Inicio" class="home-icon">
       </a>
-      <div class="summary-text" id="payment-summary">
-        Ningú deu res 🥳
-      </div>
-    </div>
-  </nav>
+    </li>
+    <li><a href="https://user15151515.github.io/perdo/">perdó</a></li>
+    <li><a href="https://user15151515.github.io/deudas/">deudas</a></li>
+    <li><a href="https://user15151515.github.io/pelis-series/">pelis/series</a></li>
+    <li><a href="https://user15151515.github.io/padel/">pàdel</a></li>
+    <li><a href="#">basquet</a></li>
+    <li><a href="#">horari</a></li>
+  </ul>
+</nav>
+
+
 
   <!-- Main Container -->
   <div class="container">
